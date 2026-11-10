@@ -94,20 +94,7 @@ const TRAJETORIA = [
 ];
 
 /* -----------------------------------------------------------
-   2. NÚMEROS
-   "fonte: 'repos'" e "fonte: 'estrelas'" são preenchidos ao vivo
-   pela API do GitHub e somem sozinhos se a API não responder.
-   Para um número fixo, use "valor: '7'".
-   ----------------------------------------------------------- */
-const METRICAS = [
-  /* "valor" aceita texto simples ou { pt, en }, para separador de milhar. */
-  { valor: { pt: '4.000+', en: '4,000+' }, rotulo: { pt: 'laudos assinados por mês', en: 'signed reports a month' } },
-  { valor: '5',     rotulo: { pt: 'sistemas em produção', en: 'systems in production' } },
-  { fonte: 'repos', rotulo: { pt: 'repositórios públicos', en: 'public repositories' } }
-];
-
-/* -----------------------------------------------------------
-   3. O QUE OS SISTEMAS ENTREGAM
+   2. O QUE OS SISTEMAS ENTREGAM
    Um cartão por sistema que já tem número para mostrar.
    ----------------------------------------------------------- */
 const IMPACTO = [
@@ -137,7 +124,7 @@ const IMPACTO = [
 ];
 
 /* -----------------------------------------------------------
-   4. DESCRIÇÕES DOS REPOSITÓRIOS
+   3. DESCRIÇÕES DOS REPOSITÓRIOS
    Substituem o texto que vem do GitHub, quando houver.
    ----------------------------------------------------------- */
 const NOTAS_REPO = {
@@ -152,7 +139,7 @@ const NOTAS_REPO = {
 };
 
 /* -----------------------------------------------------------
-   5. TEXTOS DA INTERFACE
+   4. TEXTOS DA INTERFACE
    O português já está escrito direto no index.html, então a
    página funciona sem JavaScript. Estas chaves são usadas para
    trocar de idioma nos dois sentidos.

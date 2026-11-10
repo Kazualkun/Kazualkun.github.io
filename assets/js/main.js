@@ -9,10 +9,7 @@
   var raiz = document.documentElement;
   raiz.classList.add('js');
 
-  var estado = {
-    lang: raiz.dataset.lang === 'en' ? 'en' : 'pt',
-    github: null
-  };
+  var estado = { lang: raiz.dataset.lang === 'en' ? 'en' : 'pt' };
 
   function t(chave) {
     var d = TEXTOS[estado.lang] || TEXTOS.pt;
@@ -78,7 +75,6 @@
     rotuloMenu();
     montarTrajetoria();
     montarEntregas();
-    montarLeituras();
     montarRepos();
     /* Depois de trocar o texto, o título é redividido em palavras. */
     partirTitulo();
@@ -230,34 +226,13 @@
 
       caixaEntregas.appendChild(li);
     });
+
+    jaContou = false;
+    if (caixaEntregas.dataset.entrada && caixaEntregas.classList.contains('entregas--vistas')) contarNumeros();
   }
 
   /* ---------- Números ---------- */
-  var caixaLeituras = document.getElementById('leituras');
 
-  function montarLeituras() {
-    if (!caixaLeituras || typeof METRICAS === 'undefined') return;
-    caixaLeituras.innerHTML = '';
-    var postos = 0;
-
-    METRICAS.forEach(function (m) {
-      var valor = m.valor;
-      if (valor && typeof valor === 'object') valor = valor[estado.lang] || valor.pt;
-      if (m.fonte) {
-        if (!estado.github) return;            // sem dado ainda: o posto não aparece
-        valor = String(estado.github[m.fonte]);
-      }
-      if (valor == null || valor === '') return;
-
-      var posto = criar('div', 'leitura');
-      posto.appendChild(criar('dt', 'leitura__valor', valor));
-      posto.appendChild(criar('dd', 'leitura__rotulo', (m.rotulo && m.rotulo[estado.lang]) || ''));
-      caixaLeituras.appendChild(posto);
-      postos++;
-    });
-
-    caixaLeituras.hidden = postos === 0;
-  }
 
   /* ---------- Repositórios do GitHub ---------- */
   var USUARIO = 'Kazualkun';
@@ -347,15 +322,9 @@
     })
     .then(function (dados) {
       if (!Array.isArray(dados)) throw new Error('Resposta inesperada');
-      var proprios = dados.filter(function (r) { return !r.fork && IGNORAR.indexOf(r.name) === -1; });
-      estado.github = {
-        repos: proprios.length,
-        estrelas: proprios.reduce(function (s, r) { return s + (r.stargazers_count || 0); }, 0)
-      };
       var escolhidos = ordenar(dados);
       listaRepos = escolhidos.length ? escolhidos : RESERVA;
       montarRepos();
-      montarLeituras();
     })
     .catch(function () {
       listaRepos = RESERVA;
@@ -399,7 +368,7 @@
   }
   marcar('.bloco', 'bloco--visto');
   marcar('.registro', 'registro--visto');
-  if (caixaLeituras) caixaLeituras.dataset.entrada = 'leituras--vistas';
+  if (caixaEntregas) caixaEntregas.dataset.entrada = 'entregas--vistas';
 
   /* As etapas nascem depois, no montarTrajetoria, então entram na fila lá. */
   var aoEntrar = null;
@@ -416,7 +385,7 @@
   function revelar(alvo) {
     if (!alvo || !alvo.dataset.entrada) return;
     alvo.classList.add(alvo.dataset.entrada);
-    if (alvo.dataset.entrada === 'leituras--vistas') contarNumeros();
+    if (alvo.dataset.entrada === 'entregas--vistas') contarNumeros();
   }
 
   function pendente(n) {
@@ -435,7 +404,7 @@
     revelarTitulo();
     if (indice) indice.classList.add('indice--pronto');
     /* Se a contagem travou no meio, grava o valor final. */
-    document.querySelectorAll('.leitura__valor[data-final]').forEach(function (n) {
+    document.querySelectorAll('.entrega__valor[data-final]').forEach(function (n) {
       n.textContent = n.dataset.final;
     });
     /* O avanço da linha não entra aqui: quem o mantém certo é a rolagem. */
@@ -462,10 +431,10 @@
 
     /* Um só tratador de rolagem: avança a linha do tempo e, de quebra,
        serve de reserva caso o observador não tenha disparado para algo. */
-    var pedido = null;
+    var agendado = false;
 
     function naRolagem() {
-      pedido = null;
+      agendado = false;
       if (caixaLinha) {
         var r = caixaLinha.getBoundingClientRect();
         var p = (window.innerHeight * 0.62 - r.top) / Math.max(1, r.height);
@@ -474,13 +443,24 @@
       varrerAlcancados();
     }
 
+    /* Usa o quadro de animação quando ele vem, mas não depende dele:
+       um temporizador garante a atualização se o quadro for estrangulado. */
     function pedirQuadro() {
-      if (pedido === null) pedido = requestAnimationFrame(naRolagem);
+      if (agendado) return;
+      agendado = true;
+
+      if (window.requestAnimationFrame) requestAnimationFrame(naRolagem);
+      setTimeout(function () { if (agendado) naRolagem(); }, 120);
     }
 
     window.addEventListener('scroll', pedirQuadro, { passive: true });
     window.addEventListener('resize', pedirQuadro);
+    window.addEventListener('hashchange', pedirQuadro);
+
     naRolagem();
+    /* O layout final só existe depois das fontes e das imagens. */
+    setTimeout(naRolagem, 300);
+    window.addEventListener('load', naRolagem);
 
     /* Uma sequência só: título sobe, índice entra atrás. */
     requestAnimationFrame(function () {
@@ -499,10 +479,10 @@
   var jaContou = false;
 
   function contarNumeros() {
-    if (jaContou || paradoPorPreferencia || !caixaLeituras) return;
+    if (jaContou || paradoPorPreferencia || !caixaEntregas) return;
     jaContou = true;
 
-    caixaLeituras.querySelectorAll('.leitura__valor').forEach(function (n) {
+    caixaEntregas.querySelectorAll('.entrega__valor').forEach(function (n) {
       var texto = n.textContent;
       var casado = texto.match(/^(\D*)([\d.,]+)(\D*)$/);
       if (!casado) return;

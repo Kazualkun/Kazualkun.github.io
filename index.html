@@ -11,6 +11,7 @@
 
 <meta property="og:type" content="profile">
 <meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
 <meta property="og:title" content="Gustavo Kazuo Momma — Cientista de dados, engenheiro de IA e desenvolvedor full-stack">
 <meta property="og:description" content="Sistemas em produção em telemedicina, infraestrutura hospitalar e produtos SaaS.">
 <meta property="og:image" content="assets/img/og.png">
@@ -23,19 +24,25 @@
 <link rel="stylesheet" href="assets/css/style.css">
 
 <script>
-/* Aplica o tema antes da primeira pintura para não haver piscada. */
+/* Tema e idioma antes da primeira pintura, para não haver piscada. */
 (function () {
+  var r = document.documentElement;
   try {
-    var s = localStorage.getItem('tema');
-    var d = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.documentElement.dataset.theme = s || (d ? 'dark' : 'light');
-  } catch (e) {}
+    var t = localStorage.getItem('tema');
+    r.dataset.theme = t || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  } catch (e) { r.dataset.theme = 'light'; }
+  try {
+    var i = localStorage.getItem('idioma');
+    if (!i) i = (navigator.language || 'pt').toLowerCase().indexOf('pt') === 0 ? 'pt' : 'en';
+    r.dataset.lang = i;
+  } catch (e) { r.dataset.lang = 'pt'; }
 })();
 </script>
 </head>
 
 <body>
-<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<a class="pular" href="#conteudo" data-i18n="pular">Pular para o conteúdo</a>
+<div class="progresso" id="progresso" aria-hidden="true"><span></span></div>
 
 <header class="topo">
   <div class="faixa">
@@ -44,17 +51,38 @@
       <span class="marca__nome">Gustavo Kazuo Momma</span>
     </a>
 
-    <nav class="navegacao" aria-label="Seções da página">
-      <a href="#sistemas">Sistemas</a>
-      <a href="#stack">Stack</a>
-      <a href="#codigo">Código aberto</a>
-      <a href="#contato">Contato</a>
+    <nav class="navegacao" id="navegacao" data-i18n-label="nav.secoes" aria-label="Seções da página">
+      <a href="#sistemas" data-i18n="nav.sistemas">Sistemas</a>
+      <a href="#trajetoria" data-i18n="nav.trajetoria">Trajetória</a>
+      <a href="#stack" data-i18n="nav.stack">Stack</a>
+      <a href="#codigo" data-i18n="nav.codigo">Código aberto</a>
+      <a href="#contato" data-i18n="nav.contato">Contato</a>
     </nav>
 
-    <button class="tema" type="button" id="btn-tema" aria-pressed="false">
-      <span class="tema__icone" aria-hidden="true"></span>
-      <span class="tema__texto">Tema escuro</span>
-    </button>
+    <div class="controles">
+      <div class="idioma" role="group" data-i18n-label="nav.idioma" aria-label="Mudar idioma">
+        <button type="button" data-lang="pt" aria-pressed="true">PT</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+
+      <button class="tema" type="button" id="btn-tema" aria-pressed="false">
+        <span class="tema__icone" aria-hidden="true"></span>
+        <span class="tema__texto" data-i18n="tema.escuro">Tema escuro</span>
+      </button>
+
+      <button class="menu" type="button" id="btn-menu" aria-expanded="false" aria-controls="gaveta"
+              data-i18n-label="nav.abrir" aria-label="Abrir menu">
+        <span class="menu__barras" aria-hidden="true"><i></i><i></i></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="gaveta" id="gaveta" hidden>
+    <a href="#sistemas" data-i18n="nav.sistemas">Sistemas</a>
+    <a href="#trajetoria" data-i18n="nav.trajetoria">Trajetória</a>
+    <a href="#stack" data-i18n="nav.stack">Stack</a>
+    <a href="#codigo" data-i18n="nav.codigo">Código aberto</a>
+    <a href="#contato" data-i18n="nav.contato">Contato</a>
   </div>
 </header>
 
@@ -65,50 +93,53 @@
     <div class="envelope">
       <p class="abertura__assinatura">Gustavo Kazuo Momma</p>
 
-      <h1 class="abertura__titulo">
+      <h1 class="abertura__titulo" data-i18n="hero.titulo">
         Sistemas que entram em produção e continuam de pé.
       </h1>
 
-      <p class="abertura__texto">
+      <p class="abertura__texto" data-i18n="hero.texto">
         Cientista de dados, engenheiro de IA e desenvolvedor full-stack. Trabalho em
         telemedicina, infraestrutura hospitalar e produtos SaaS — do modelo de dados
         ao domínio que atende em produção.
       </p>
 
       <div class="abertura__acoes">
-        <a class="botao botao--forte" href="#sistemas">Ver os sistemas</a>
+        <a class="botao botao--forte" href="#sistemas" data-i18n="hero.ver">Ver os sistemas</a>
         <a class="botao" href="https://github.com/Kazualkun" rel="me noopener" target="_blank">GitHub</a>
         <a class="botao" href="https://www.linkedin.com/in/gustavo-kazuo-momma-6a1a93251" rel="me noopener" target="_blank">LinkedIn</a>
       </div>
 
       <!-- O índice de domínios é o objeto principal da abertura. -->
-      <div class="indice" role="list" aria-label="Sistemas em produção">
+      <div class="indice" role="list" data-i18n-label="hero.indice" aria-label="Sistemas em produção">
         <a class="indice__linha" role="listitem" href="#imacardios" style="--marca: var(--c-imacardios)">
           <span class="indice__dominio">app.imacardios.com</span>
-          <span class="indice__papel">Telecardiologia e laudos remotos</span>
-          <span class="indice__escopo">Backend, frontend, banco e APIs</span>
+          <span class="indice__papel" data-i18n="ix.imacardios.papel">Telecardiologia e laudos remotos</span>
+          <span class="indice__escopo" data-i18n="ix.imacardios.escopo">Backend, frontend, banco e APIs</span>
         </a>
         <a class="indice__linha" role="listitem" href="#intranet" style="--marca: var(--c-hsf)">
           <span class="indice__dominio">intranet.hospsaofrancisco.com.br</span>
-          <span class="indice__papel">Intranet hospitalar</span>
-          <span class="indice__escopo">Sistemas e infraestrutura crítica</span>
+          <span class="indice__papel" data-i18n="ix.intranet.papel">Intranet hospitalar</span>
+          <span class="indice__escopo" data-i18n="ix.intranet.escopo">Sistemas e infraestrutura crítica</span>
         </a>
         <a class="indice__linha" role="listitem" href="#toriitech" style="--marca: var(--c-torii)">
           <span class="indice__dominio">toriitech.app.br</span>
-          <span class="indice__papel">Estúdio de produtos digitais</span>
-          <span class="indice__escopo">Site institucional e ecossistema</span>
+          <span class="indice__papel" data-i18n="ix.toriitech.papel">Estúdio de produtos digitais</span>
+          <span class="indice__escopo" data-i18n="ix.toriitech.escopo">Site institucional e ecossistema</span>
         </a>
         <a class="indice__linha" role="listitem" href="#studio" style="--marca: var(--c-torii)">
           <span class="indice__dominio">studio.toriitech.app.br</span>
-          <span class="indice__papel">SaaS de conteúdo com IA</span>
-          <span class="indice__escopo">Contas, painel e assistente</span>
+          <span class="indice__papel" data-i18n="ix.studio.papel">SaaS de conteúdo com IA</span>
+          <span class="indice__escopo" data-i18n="ix.studio.escopo">Contas, painel e assistente</span>
         </a>
         <a class="indice__linha" role="listitem" href="#wardpoint" style="--marca: var(--c-wardpoint)">
           <span class="indice__dominio">wardpoint.toriitech.app.br</span>
-          <span class="indice__papel">SaaS de análise de partidas</span>
-          <span class="indice__escopo">Web, assinatura e app desktop</span>
+          <span class="indice__papel" data-i18n="ix.wardpoint.papel">SaaS de análise de partidas</span>
+          <span class="indice__escopo" data-i18n="ix.wardpoint.escopo">Web, assinatura e app desktop</span>
         </a>
       </div>
+
+      <!-- Preenchido por main.js a partir de METRICAS em conteudo.js. -->
+      <dl class="leituras" id="leituras"></dl>
     </div>
   </section>
 
@@ -116,68 +147,59 @@
   <section class="bloco" id="resumo" aria-labelledby="t-resumo">
     <div class="envelope bloco__grade">
       <div class="trilho">
-        <h2 class="trilho__rotulo" id="t-resumo">Resumo</h2>
+        <h2 class="trilho__rotulo" id="t-resumo" data-i18n="resumo.rotulo">Resumo</h2>
       </div>
       <div class="bloco__corpo">
-        <p class="prosa prosa--destaque">
+        <p class="prosa prosa--destaque" data-i18n="resumo.p1">
           Comecei pela engenharia de software e segui para dados e IA, e hoje trabalho
           nos dois lados da mesma entrega: o modelo que decide e o sistema que coloca
           essa decisão na frente de quem precisa dela.
         </p>
-        <p class="prosa">
-          Na prática isso significa escrever o backend, modelar o banco, desenhar as APIs,
-          construir a interface e cuidar do DNS, do certificado e do domínio que sustentam
-          tudo isso. Meu dia a dia é em ambiente hospitalar, onde um sistema fora do ar
+        <p class="prosa" data-i18n="resumo.p2">
+          Na prática isso significa treinar modelos preditivos e de linguagem, escrever o
+          backend, modelar o banco, desenhar as APIs, construir a interface e cuidar do DNS,
+          do certificado e do domínio que sustentam tudo isso. Meu dia a dia é em ambiente hospitalar, onde um sistema fora do ar
           tem custo real, então trato disponibilidade, privacidade de dados e acessibilidade
           como parte do requisito, não como ajuste posterior.
         </p>
-        <p class="prosa">
-          Sou pós-graduado em Inteligência Artificial, Machine Learning e Ciência de Dados,
-          e tecnólogo em Sistemas para Internet pela FATEC.
+        <p class="prosa" data-i18n="resumo.p3">
+          Português nativo e inglês fluente. Aberto a trabalho remoto.
         </p>
-
-        <dl class="formacao">
-          <div class="formacao__item">
-            <dt>Pós-graduação</dt>
-            <dd>Inteligência Artificial, Machine Learning e Ciência de Dados</dd>
-          </div>
-          <div class="formacao__item">
-            <dt>Graduação</dt>
-            <dd>Tecnólogo em Sistemas para Internet — FATEC</dd>
-          </div>
-          <div class="formacao__item">
-            <dt>Atuação</dt>
-            <dd>Hospital São Francisco, São Roque — São Paulo, Brasil</dd>
-          </div>
-        </dl>
       </div>
     </div>
   </section>
 
   <!-- ─────────── Sistemas ─────────── -->
-  <section class="bloco bloco--sistemas" id="sistemas" aria-labelledby="t-sistemas">
+  <section class="bloco bloco--faixa bloco--largo" id="sistemas" aria-labelledby="t-sistemas">
     <div class="envelope bloco__grade">
       <div class="trilho">
-        <h2 class="trilho__rotulo" id="t-sistemas">Sistemas em produção</h2>
-        <p class="trilho__nota">Cinco aplicações no ar, com domínio próprio e usuários reais.</p>
+        <h2 class="trilho__rotulo" id="t-sistemas" data-i18n="sis.rotulo">Sistemas em produção</h2>
+        <p class="trilho__nota" data-i18n="sis.nota">Cinco aplicações no ar, com domínio próprio e usuários reais.</p>
       </div>
 
       <div class="bloco__corpo registros">
 
-        <!-- Imacardios -->
         <article class="registro" id="imacardios" style="--marca: var(--c-imacardios)">
           <div class="registro__texto">
-            <h3 class="registro__nome">IMACARDIOS</h3>
+            <div class="registro__cabeca">
+              <h3 class="registro__nome">IMACARDIOS</h3>
+              <p class="registro__periodo" data-i18n="per.imacardios">mar — jun 2026</p>
+            </div>
             <a class="registro__dominio" href="https://app.imacardios.com" rel="noopener" target="_blank">app.imacardios.com</a>
-            <p class="registro__sobre">
-              Centro de comando de telecardiologia para o Brasil e a América Latina: laudos
-              remotos de ECG, Holter, MAPA 24h e espirometria, assinados por cardiologistas
-              com RQE e acelerados pela IA dri-ka. Atuo no backend, no frontend, na modelagem
-              do banco e nas APIs que movem exame, laudo e assinatura entre as pontas, com
-              fila por modalidade e SLA de resposta abaixo de 18 minutos.
+            <p class="registro__sobre" data-i18n="sis.imacardios.sobre">
+              Plataforma de telecardiologia que construí de ponta a ponta para o Dr. Yanquel
+              Bazan, da infraestrutura ao site no ar. Atende mais de 50 clínicas no país e
+              fecha mais de 4.000 laudos assinados por mês, entre ECG, Holter, MAPA 24h e
+              espirometria. Backend em Node.js e TypeScript, frontend em Angular, modelagem
+              do banco e as APIs que movem exame, laudo e assinatura entre as pontas.
             </p>
             <ul class="etiquetas">
-              <li>Telecardiologia</li><li>IA aplicada</li><li>APIs</li><li>MFA</li><li>LGPD by design</li>
+              <li data-i18n="tag.telecardiologia">Telecardiologia</li>
+              <li>Node.js</li>
+              <li>Angular</li>
+              <li data-i18n="tag.apis">APIs</li>
+              <li data-i18n="tag.banco">Modelagem de banco</li>
+              <li>LGPD</li>
             </ul>
           </div>
           <div class="registro__visual">
@@ -188,19 +210,24 @@
           </div>
         </article>
 
-        <!-- Intranet HSF -->
         <article class="registro" id="intranet" style="--marca: var(--c-hsf)">
           <div class="registro__texto">
-            <h3 class="registro__nome">Intranet do Hospital São Francisco</h3>
+            <div class="registro__cabeca">
+              <h3 class="registro__nome">Intranet do Hospital São Francisco</h3>
+              <p class="registro__periodo" data-i18n="per.intranet">jun 2026</p>
+            </div>
             <a class="registro__dominio" href="https://intranet.hospsaofrancisco.com.br" rel="noopener" target="_blank">intranet.hospsaofrancisco.com.br</a>
-            <p class="registro__sobre">
-              Portal do colaborador que reúne convênios, exames, ramais, ponto eletrônico,
-              manuais, protocolos, POPs, transferência de paciente e ficha anestésica em um
-              só lugar. É infraestrutura corporativa crítica: usada todos os dias, por turno,
-              dentro do hospital.
+            <p class="registro__sobre" data-i18n="sis.intranet.sobre">
+              Portal do colaborador que criei e hospedei sozinho, reunindo convênios, exames,
+              ramais, ponto eletrônico, manuais, protocolos, POPs, transferência de paciente
+              e ficha anestésica em um só lugar. É infraestrutura corporativa crítica: usada
+              todos os dias, por turno, dentro do hospital.
             </p>
             <ul class="etiquetas">
-              <li>Saúde</li><li>Infraestrutura</li><li>Área administrativa</li><li>LGPD</li>
+              <li data-i18n="tag.saude">Saúde</li>
+              <li data-i18n="tag.infra">Infraestrutura</li>
+              <li data-i18n="tag.admin">Área administrativa</li>
+              <li>LGPD</li>
             </ul>
           </div>
           <div class="registro__visual">
@@ -211,18 +238,22 @@
           </div>
         </article>
 
-        <!-- Torii Tech -->
         <article class="registro" id="toriitech" style="--marca: var(--c-torii)">
           <div class="registro__texto">
-            <h3 class="registro__nome">Torii Tech</h3>
+            <div class="registro__cabeca">
+              <h3 class="registro__nome">Torii Tech</h3>
+              <p class="registro__periodo" data-i18n="per.torii">jul 2026 — atual</p>
+            </div>
             <a class="registro__dominio" href="https://toriitech.app.br" rel="noopener" target="_blank">toriitech.app.br</a>
-            <p class="registro__sobre">
+            <p class="registro__sobre" data-i18n="sis.toriitech.sobre">
               Estúdio de produtos digitais e a base do ecossistema: sistemas, IA, automação,
               aplicativos e sites construídos a partir da operação que o cliente já tem.
               Daqui saem o Studio e o WardPoint, cada um no seu subdomínio.
             </p>
             <ul class="etiquetas">
-              <li>Next.js</li><li>Cloudflare</li><li>Design de interface</li>
+              <li>Next.js</li>
+              <li>Cloudflare</li>
+              <li data-i18n="tag.design">Design de interface</li>
             </ul>
           </div>
           <div class="registro__visual">
@@ -233,18 +264,23 @@
           </div>
         </article>
 
-        <!-- Torii Studio -->
         <article class="registro" id="studio" style="--marca: var(--c-torii)">
           <div class="registro__texto">
-            <h3 class="registro__nome">Torii Studio</h3>
+            <div class="registro__cabeca">
+              <h3 class="registro__nome">Torii Studio</h3>
+              <p class="registro__periodo" data-i18n="per.torii">jul 2026 — atual</p>
+            </div>
             <a class="registro__dominio" href="https://studio.toriitech.app.br" rel="noopener" target="_blank">studio.toriitech.app.br</a>
-            <p class="registro__sobre">
+            <p class="registro__sobre" data-i18n="sis.studio.sobre">
               SaaS que monta o mês de campanhas e posts de um negócio a partir da marca, do
               público e das objeções de venda dele. Tem cadastro, painel mensal por pacote e
               um assistente que responde só com o que está na página, em vez de inventar.
             </p>
             <ul class="etiquetas">
-              <li>SaaS</li><li>LLM</li><li>Autenticação</li><li>Assinaturas</li>
+              <li>SaaS</li>
+              <li>LLM</li>
+              <li data-i18n="tag.auth">Autenticação</li>
+              <li data-i18n="tag.assinaturas">Assinaturas</li>
             </ul>
           </div>
           <div class="registro__visual">
@@ -255,18 +291,22 @@
           </div>
         </article>
 
-        <!-- WardPoint -->
         <article class="registro" id="wardpoint" style="--marca: var(--c-wardpoint)">
           <div class="registro__texto">
-            <h3 class="registro__nome">WardPoint</h3>
+            <div class="registro__cabeca">
+              <h3 class="registro__nome">WardPoint</h3>
+              <p class="registro__periodo" data-i18n="per.torii">jul 2026 — atual</p>
+            </div>
             <a class="registro__dominio" href="https://wardpoint.toriitech.app.br" rel="noopener" target="_blank">wardpoint.toriitech.app.br</a>
-            <p class="registro__sobre">
+            <p class="registro__sobre" data-i18n="sis.wardpoint.sobre">
               Produto de assinatura que revisa cada partida do jogador e aponta, no segundo
               exato do replay, o erro que custou a vitória. Envolve análise sobre dados de
               partida, aplicação desktop para Windows e o fluxo de cobrança recorrente.
             </p>
             <ul class="etiquetas">
-              <li>Análise de dados</li><li>App desktop</li><li>Pagamento recorrente</li>
+              <li data-i18n="tag.dados">Análise de dados</li>
+              <li data-i18n="tag.desktop">App desktop</li>
+              <li data-i18n="tag.recorrente">Pagamento recorrente</li>
             </ul>
           </div>
           <div class="registro__visual">
@@ -281,39 +321,57 @@
     </div>
   </section>
 
-  <!-- ─────────── Stack ─────────── -->
-  <section class="bloco" id="stack" aria-labelledby="t-stack">
+  <!-- ─────────── Trajetória ─────────── -->
+  <section class="bloco" id="trajetoria" aria-labelledby="t-trajetoria">
     <div class="envelope bloco__grade">
       <div class="trilho">
-        <h2 class="trilho__rotulo" id="t-stack">Stack técnica</h2>
-        <p class="trilho__nota">O que uso para construir e manter o que está acima.</p>
+        <h2 class="trilho__rotulo" id="t-trajetoria" data-i18n="traj.rotulo">Trajetória</h2>
+        <p class="trilho__nota" data-i18n="traj.nota">Formação e onde ela foi aplicada.</p>
+      </div>
+      <div class="bloco__corpo">
+        <!-- Preenchido por main.js a partir de TRAJETORIA em conteudo.js. -->
+        <ol class="linha" id="linha"></ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── Stack ─────────── -->
+  <section class="bloco bloco--faixa" id="stack" aria-labelledby="t-stack">
+    <div class="envelope bloco__grade">
+      <div class="trilho">
+        <h2 class="trilho__rotulo" id="t-stack" data-i18n="stack.rotulo">Stack técnica</h2>
+        <p class="trilho__nota" data-i18n="stack.nota">O que uso para construir e manter o que está acima.</p>
       </div>
 
       <div class="bloco__corpo">
         <dl class="stack">
           <div class="stack__grupo">
-            <dt>Linguagens</dt>
-            <dd><span>Python</span><span>JavaScript</span><span>TypeScript</span><span>PHP</span><span>SQL</span><span>HTML5</span><span>CSS3</span></dd>
+            <dt data-i18n="stack.linguagens">Linguagens</dt>
+            <dd><span>Python</span><span>JavaScript</span><span>TypeScript</span><span>PHP</span><span>SQL</span><span>C++</span><span>C#</span><span>HTML5</span><span>CSS3</span></dd>
           </div>
           <div class="stack__grupo">
-            <dt>Frameworks e bibliotecas</dt>
-            <dd><span>React</span><span>Next.js</span><span>Node.js</span></dd>
+            <dt data-i18n="stack.ml">Machine learning e dados</dt>
+            <dd><span>Pandas</span><span>NumPy</span><span>scikit-learn</span><span>TensorFlow</span><span>PyTorch</span><span data-i18n="stack.supervisionado">Aprendizado supervisionado e não supervisionado</span><span data-i18n="stack.nlp">Processamento de linguagem natural</span><span data-i18n="stack.features">Engenharia de features</span><span data-i18n="stack.viz">Visualização de dados</span></dd>
           </div>
           <div class="stack__grupo">
-            <dt>Bancos de dados</dt>
+            <dt data-i18n="stack.frameworks">Frameworks e bibliotecas</dt>
+            <dd><span>Node.js</span><span>React</span><span>Next.js</span><span>Angular</span></dd>
+          </div>
+          <div class="stack__grupo">
+            <dt data-i18n="stack.bancos">Bancos de dados</dt>
             <dd><span>PostgreSQL</span><span>MySQL</span><span>Oracle Database</span><span>Neon</span></dd>
           </div>
           <div class="stack__grupo">
-            <dt>Cloud e infraestrutura</dt>
-            <dd><span>Cloudflare — DNS</span><span>SSL/TLS</span><span>Edge computing</span><span>Domínios e subdomínios</span><span>Google Cloud Platform</span><span>Cloud Storage</span></dd>
+            <dt data-i18n="stack.cloud">Cloud e infraestrutura</dt>
+            <dd><span>Cloudflare DNS</span><span>SSL/TLS</span><span>Edge computing</span><span data-i18n="stack.dominios">Domínios e subdomínios</span><span>Google Cloud Platform</span><span>Cloud Storage</span><span data-i18n="stack.redes">Administração de redes</span><span data-i18n="stack.servidor">Hardware de servidor</span></dd>
           </div>
           <div class="stack__grupo">
-            <dt>IA e automação</dt>
-            <dd><span>AI Skills customizadas</span><span>LLMs locais e self-hosted</span><span>Modelos open-source</span><span>Automação de rotinas</span></dd>
+            <dt data-i18n="stack.iaauto">IA e automação</dt>
+            <dd><span data-i18n="stack.skills">AI Skills customizadas</span><span data-i18n="stack.llms">LLMs locais e self-hosted</span><span data-i18n="stack.open">Modelos open-source</span><span data-i18n="stack.rotinas">Automação de rotinas</span></dd>
           </div>
           <div class="stack__grupo">
-            <dt>Engenharia e conformidade</dt>
-            <dd><span>Code review automatizado</span><span>LGPD</span><span>CDC</span><span>Acessibilidade</span></dd>
+            <dt data-i18n="stack.eng">Engenharia e conformidade</dt>
+            <dd><span data-i18n="stack.review">Code review automatizado</span><span>LGPD</span><span>CDC</span><span data-i18n="stack.a11y">Acessibilidade</span></dd>
           </div>
         </dl>
       </div>
@@ -324,28 +382,27 @@
   <section class="bloco" id="codigo" aria-labelledby="t-codigo">
     <div class="envelope bloco__grade">
       <div class="trilho">
-        <h2 class="trilho__rotulo" id="t-codigo">Código aberto</h2>
-        <p class="trilho__nota">Repositórios públicos, lidos direto do GitHub.</p>
+        <h2 class="trilho__rotulo" id="t-codigo" data-i18n="cod.rotulo">Código aberto</h2>
+        <p class="trilho__nota" data-i18n="cod.nota">Repositórios públicos, lidos direto do GitHub.</p>
       </div>
 
       <div class="bloco__corpo">
         <ul class="repos" id="repos" aria-busy="true" aria-live="polite">
-          <li class="repos__carregando">Carregando repositórios…</li>
+          <li class="repos__carregando" data-i18n="cod.carregando">Carregando repositórios…</li>
         </ul>
-        <a class="botao" href="https://github.com/Kazualkun?tab=repositories" rel="noopener" target="_blank">Ver todos no GitHub</a>
+        <a class="botao" href="https://github.com/Kazualkun?tab=repositories" rel="noopener" target="_blank" data-i18n="cod.todos">Ver todos no GitHub</a>
       </div>
     </div>
   </section>
 
 </main>
 
-<!-- ─────────── Rodapé ─────────── -->
 <footer class="rodape" id="contato">
   <div class="envelope rodape__grade">
     <div>
-      <p class="rodape__chamada">Disponível para projetos e conversas técnicas.</p>
+      <p class="rodape__chamada" data-i18n="rod.chamada">Disponível para projetos e conversas técnicas.</p>
       <p class="rodape__nome">Gustavo Kazuo Momma</p>
-      <p class="rodape__papel">Cientista de dados, engenheiro de IA e desenvolvedor full-stack — São Paulo, Brasil</p>
+      <p class="rodape__papel" data-i18n="rod.papel">Cientista de dados, engenheiro de IA e desenvolvedor full-stack — Brasil, aberto a trabalho remoto</p>
     </div>
 
     <ul class="contatos">
@@ -368,7 +425,7 @@
   </div>
 
   <div class="envelope rodape__base">
-    <p>Página construída à mão, sem framework, publicada no GitHub Pages.</p>
+    <p data-i18n="rod.base">Página construída à mão, sem framework, publicada no GitHub Pages.</p>
     <p><span id="ano">2026</span></p>
   </div>
 </footer>
@@ -380,14 +437,16 @@
   "name": "Gustavo Kazuo Momma",
   "jobTitle": "Cientista de dados, engenheiro de IA e desenvolvedor full-stack",
   "address": { "@type": "PostalAddress", "addressRegion": "SP", "addressCountry": "BR" },
-  "worksFor": { "@type": "Organization", "name": "Hospital São Francisco, São Roque" },
-  "alumniOf": { "@type": "CollegeOrUniversity", "name": "FATEC" },
+  "worksFor": { "@type": "Organization", "name": "Grupo São Francisco" },
+  "knowsLanguage": ["pt-BR", "en"],
+  "alumniOf": [{ "@type": "CollegeOrUniversity", "name": "FATEC São Roque" }, { "@type": "CollegeOrUniversity", "name": "Anhanguera Educacional" }],
   "knowsAbout": ["Ciência de dados","Machine Learning","Engenharia de IA","Desenvolvimento full-stack","Cloudflare","PostgreSQL","Next.js","LGPD"],
   "sameAs": ["https://github.com/Kazualkun", "https://www.linkedin.com/in/gustavo-kazuo-momma-6a1a93251"],
   "email": "ikazualtwitch@gmail.com"
 }
 </script>
 
+<script src="assets/js/conteudo.js" defer></script>
 <script src="assets/js/main.js" defer></script>
 </body>
 </html>

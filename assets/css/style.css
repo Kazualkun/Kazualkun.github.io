@@ -11,7 +11,8 @@
   --superficie: #F8FAFC;
   --tinta:      #0D1B2A;
   --tinta-2:    #44576B;
-  --tinta-3:    #6E8297;
+  /* Escolhido por contraste: passa em AA sobre papel, faixa e superfície. */
+  --tinta-3:    #566879;
   --linha:      #C3CEDA;
   --linha-fina: #D7DFE7;
   --foco:       #0B52C9;
@@ -161,9 +162,66 @@ a { color: inherit; text-decoration: none; }
   text-overflow: ellipsis;
 }
 
-.navegacao { display: none; gap: 1.5rem; font-size: var(--t-min); color: var(--tinta-2); }
+.navegacao { display: none; gap: 1.4rem; font-size: var(--t-min); color: var(--tinta-2); }
 .navegacao a { padding-block: 0.25rem; border-bottom: 1px solid transparent; transition: color .18s, border-color .18s; }
 .navegacao a:hover { color: var(--tinta); border-bottom-color: var(--tinta); }
+/* A seção em que a pessoa está fica marcada. */
+.navegacao a[aria-current] { color: var(--tinta); border-bottom-color: var(--tinta); }
+
+.controles { display: flex; align-items: center; gap: 0.5rem; flex: none; }
+
+/* Idioma: controle segmentado, os dois estados sempre visíveis. */
+.idioma { display: flex; border: 1px solid var(--linha); }
+.idioma button {
+  padding: 0.38rem 0.5rem;
+  background: transparent;
+  border: 0;
+  font-family: var(--mono);
+  font-size: var(--t-micro);
+  color: var(--tinta-3);
+  cursor: pointer;
+  transition: background .18s, color .18s;
+}
+.idioma button + button { border-left: 1px solid var(--linha); }
+.idioma button:hover { color: var(--tinta); }
+.idioma button[aria-pressed="true"] { background: var(--tinta); color: var(--papel); }
+
+/* Botão do menu: duas barras que viram um X quando aberto. */
+.menu {
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--linha);
+  color: var(--tinta);
+  cursor: pointer;
+}
+.menu:hover { border-color: var(--tinta); }
+.menu__barras { display: grid; gap: 4px; width: 15px; }
+.menu__barras i {
+  display: block;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform .22s cubic-bezier(.3,.7,.3,1);
+}
+.menu[aria-expanded="true"] .menu__barras i:first-child { transform: translateY(2.75px) rotate(45deg); }
+.menu[aria-expanded="true"] .menu__barras i:last-child { transform: translateY(-2.75px) rotate(-45deg); }
+
+.gaveta {
+  border-top: 1px solid var(--linha-fina);
+  background: var(--papel);
+  padding-inline: var(--gutter);
+}
+.gaveta[hidden] { display: none; }
+.gaveta a {
+  display: block;
+  padding: 0.95rem 0;
+  font-size: var(--t-base);
+  border-bottom: 1px solid var(--linha-fina);
+}
+.gaveta a:last-child { border-bottom: 0; }
 
 .tema {
   display: flex;
@@ -190,9 +248,29 @@ a { color: inherit; text-decoration: none; }
 
 .tema__texto { display: none; }
 
-@media (min-width: 52rem) {
+/* A navegação completa só aparece quando cabe sem apertar. */
+@media (min-width: 64rem) {
   .navegacao { display: flex; }
+  .menu, .gaveta { display: none; }
+}
+@media (min-width: 76rem) {
   .tema__texto { display: inline; }
+}
+
+/* ---------- Progresso de leitura ---------- */
+.progresso {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  height: 2px;
+  pointer-events: none;
+}
+.progresso span {
+  display: block;
+  height: 100%;
+  background: var(--tinta);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
 }
 
 /* ---------- Abertura ---------- */
@@ -321,9 +399,129 @@ a { color: inherit; text-decoration: none; }
   .indice__dominio { font-size: var(--t-base); }
 }
 
+/* ---------- Leituras numéricas ----------
+   Continuação do índice, não um painel de destaque: valores em
+   monoespaçada e discretos, para não competir com os domínios. */
+.leituras {
+  display: grid;
+  /* Acompanha a quantidade de itens em conteudo.js, sem vão sobrando. */
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  gap: 1px;
+  margin-top: 2.5rem;
+  max-width: 64rem;
+  background: var(--linha-fina);
+  border: 1px solid var(--linha-fina);
+}
+.leituras[hidden] { display: none; }
+
+.leitura { padding: 1rem 1.15rem; background: var(--papel); }
+.leitura__valor {
+  font-family: var(--mono);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--tinta);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.leitura__rotulo { margin-top: 0.3rem; font-size: var(--t-micro); color: var(--tinta-3); }
+
+
+/* ---------- Linha do tempo ----------
+   É mesmo uma sequência, então o marcador e a linha informam
+   ordem — não são decoração. */
+.linha { position: relative; }
+
+.linha::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  width: 1px;
+  background: var(--linha);
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+  transition: transform .9s cubic-bezier(.3,.7,.3,1);
+}
+.linha--vista::before { transform: scaleY(1); }
+
+/* A trajetória é montada por JavaScript: sem ele, não mostra seção vazia. */
+html:not(.js) #trajetoria { display: none; }
+
+.etapa {
+  position: relative;
+  display: grid;
+  gap: 0.2rem 2rem;
+  padding: 0 0 2.25rem 1.6rem;
+}
+.etapa:last-child { padding-bottom: 0; }
+
+/* Marcador quadrado: cheio para trabalho, vazado para formação. */
+.etapa::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: 0.5rem;
+  width: 9px;
+  height: 9px;
+  background: var(--papel);
+  border: 1.5px solid var(--tinta-3);
+}
+.etapa[data-tipo="trabalho"]::before { background: var(--tinta); border-color: var(--tinta); }
+.etapa--atual::before { border-color: var(--tinta); box-shadow: 0 0 0 4px color-mix(in srgb, var(--tinta) 12%, transparent); }
+
+.etapa__periodo {
+  font-family: var(--mono);
+  font-size: var(--t-micro);
+  color: var(--tinta-3);
+  font-variant-numeric: tabular-nums;
+  padding-top: 0.1rem;
+}
+
+.etapa__topo { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.5rem 0.75rem; }
+.etapa__cargo { font-size: var(--t-med); font-weight: 600; letter-spacing: -0.02em; }
+
+.etapa__agora {
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--linha);
+  font-size: var(--t-micro);
+  color: var(--tinta-2);
+  background: var(--superficie);
+}
+
+.etapa__org { margin-top: 0.2rem; font-size: var(--t-min); color: var(--tinta-2); }
+
+.etapa__pontos { margin-top: 0.85rem; display: grid; gap: 0.4rem; }
+.etapa__pontos li {
+  position: relative;
+  padding-left: 1rem;
+  font-size: var(--t-min);
+  color: var(--tinta-2);
+  max-width: 60ch;
+  line-height: 1.55;
+}
+.etapa__pontos li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 5px;
+  height: 1px;
+  background: var(--tinta-3);
+}
+
+@media (min-width: 46rem) {
+  /* Coluna de datas, vão de 2rem e a linha correndo no meio do vão. */
+  /* 10rem comporta "dez 2025 — jun 2026" numa linha só. */
+  .etapa { grid-template-columns: 10rem minmax(0, 1fr); gap: 0.2rem 2rem; padding-left: 0; }
+  .etapa__periodo { text-align: right; }
+  .etapa::before { left: calc(11rem - 4px); }
+  .linha::before { left: 11rem; }
+}
+
 /* ---------- Estrutura de bloco ---------- */
 .bloco { padding-block: var(--salto); border-top: 1px solid var(--linha-fina); }
-.bloco--sistemas { background: var(--papel-rec); }
+.bloco--faixa { background: var(--papel-rec); }
 
 .bloco__grade { display: grid; gap: clamp(2rem, 4vw, 3rem); }
 
@@ -332,8 +530,8 @@ a { color: inherit; text-decoration: none; }
   .trilho { position: sticky; top: 6rem; align-self: start; }
 
   /* As capturas são a prova do trabalho: esta seção usa a largura inteira. */
-  .bloco--sistemas .bloco__grade { grid-template-columns: minmax(0, 1fr); gap: clamp(2.5rem, 4vw, 3.5rem); }
-  .bloco--sistemas .trilho {
+  .bloco--largo .bloco__grade { grid-template-columns: minmax(0, 1fr); gap: clamp(2.5rem, 4vw, 3.5rem); }
+  .bloco--largo .trilho {
     position: static;
     display: flex;
     align-items: baseline;
@@ -342,7 +540,7 @@ a { color: inherit; text-decoration: none; }
     padding-bottom: 1.1rem;
     border-bottom: 1px solid var(--linha);
   }
-  .bloco--sistemas .trilho__nota { margin-top: 0; max-width: 36ch; text-align: right; }
+  .bloco--largo .trilho__nota { margin-top: 0; max-width: 36ch; text-align: right; }
 }
 
 .trilho__rotulo {
@@ -405,11 +603,27 @@ a { color: inherit; text-decoration: none; }
   .registro:nth-child(even) .registro__texto { order: 2; }
 }
 
+/* Nome à esquerda, período de construção à direita, como na trajetória. */
+.registro__cabeca {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+}
+
 .registro__nome {
   font-size: var(--t-gr);
   font-weight: 600;
   letter-spacing: -0.03em;
   text-wrap: balance;
+}
+
+.registro__periodo {
+  font-family: var(--mono);
+  font-size: var(--t-micro);
+  color: var(--tinta-3);
+  white-space: nowrap;
 }
 
 .registro__dominio {

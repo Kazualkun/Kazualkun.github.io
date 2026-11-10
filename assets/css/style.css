@@ -418,6 +418,9 @@ a { color: inherit; text-decoration: none; }
   .entregas { grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr)); }
 }
 
+.anim .entregas--vistas .entrega { opacity: 1; translate: 0 0; }
+.anim .entrega { opacity: 0; translate: 0 20px; }
+
 .entrega {
   display: grid;
   align-content: start;
@@ -426,7 +429,12 @@ a { color: inherit; text-decoration: none; }
   background: var(--superficie);
   border: 1px solid var(--linha-fina);
   border-radius: var(--r-lg);
-  transition: border-color .3s, box-shadow .3s, transform .3s cubic-bezier(.3,.7,.3,1);
+  transition:
+    opacity .55s ease,
+    translate .6s cubic-bezier(.3,.7,.3,1),
+    border-color .3s,
+    box-shadow .3s,
+    transform .3s cubic-bezier(.3,.7,.3,1);
 }
 
 @media (hover: hover) {
@@ -765,37 +773,18 @@ html:not(.js) #trajetoria { display: none; }
 
 /* A imagem se desenha de baixo para cima quando entra em vista.
    Guardado por reduced-motion para nunca esconder a captura sem querer. */
-/* A captura se desenha de cima para baixo, com um fio da cor do sistema
-   correndo na borda do que está sendo revelado — leitura de instrumento. */
-.anim .janela img { clip-path: inset(0 0 100% 0); }
+/* A captura se desenha de cima para baixo ao entrar e se recolhe ao sair.
+   Transição, não animação: o caminho de volta é o mesmo, invertido. */
+.anim .janela img {
+  clip-path: inset(0 0 100% 0);
+  transform: scale(1.05);
+  transition:
+    clip-path .95s cubic-bezier(.26,.72,.26,1),
+    transform .95s cubic-bezier(.26,.72,.26,1);
+}
 .anim .registro--visto .janela img {
-  animation: revelarCaptura 1.15s cubic-bezier(.26,.72,.26,1) forwards;
-}
-
-.anim .janela::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 2px;
-  background: var(--marca);
-  opacity: 0;
-  pointer-events: none;
-}
-.anim .registro--visto .janela::after {
-  animation: varrerCaptura 1.15s cubic-bezier(.26,.72,.26,1) forwards;
-}
-
-@keyframes revelarCaptura {
-  from { clip-path: inset(0 0 100% 0); transform: scale(1.05); }
-  to   { clip-path: inset(0 0 0 0);    transform: scale(1); }
-}
-@keyframes varrerCaptura {
-  0%   { top: 0;    opacity: 0; }
-  12%  {            opacity: 1; }
-  88%  {            opacity: 1; }
-  100% { top: 100%; opacity: 0; }
+  clip-path: inset(0 0 0 0);
+  transform: scale(1);
 }
 
 @media (hover: hover) {
@@ -813,6 +802,9 @@ html:not(.js) #trajetoria { display: none; }
    Cada categoria é um cartão que diz para que serve, não só o que é. */
 .stack { display: grid; gap: 0.75rem; }
 
+.anim .stack__grupo { opacity: 0; translate: 0 20px; }
+.anim .stack__grupo.stack--vista { opacity: 1; translate: 0 0; }
+
 .stack__grupo {
   position: relative;
   display: grid;
@@ -821,7 +813,12 @@ html:not(.js) #trajetoria { display: none; }
   background: var(--superficie);
   border: 1px solid var(--linha-fina);
   border-radius: var(--r-md);
-  transition: border-color .28s, box-shadow .28s, transform .28s cubic-bezier(.3,.7,.3,1);
+  transition:
+    opacity .5s ease,
+    translate .6s cubic-bezier(.3,.7,.3,1),
+    border-color .28s,
+    box-shadow .28s,
+    transform .28s cubic-bezier(.3,.7,.3,1);
 }
 
 /* Fio de tinta que cresce na lateral quando o ponteiro passa. */

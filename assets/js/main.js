@@ -368,79 +368,73 @@
   }
   marcar('.bloco', 'bloco--visto');
   marcar('.registro', 'registro--visto');
+  marcar('.stack__grupo', 'stack--vista');
   if (caixaEntregas) caixaEntregas.dataset.entrada = 'entregas--vistas';
 
-  /* As etapas nascem depois, no montarTrajetoria, então entram na fila lá. */
-  var aoEntrar = null;
-
+  /* As etapas nascem depois, no montarTrajetoria. */
   function registrarEtapas() {
-    document.querySelectorAll('.etapa').forEach(function (n) {
-      if (n.dataset.entrada) return;
-      n.dataset.entrada = 'etapa--vista';
-      if (aoEntrar) aoEntrar.observe(n);
-      else n.classList.add('etapa--vista');
+    marcar('.etapa', 'etapa--vista');
+    recalcular();
+  }
+
+  /* A posição na tela é a única fonte de verdade: o efeito entra quando
+     o elemento sobe para a faixa de leitura e sai quando ele deixa a faixa.
+     Por isso ele acompanha a rolagem nos dois sentidos. */
+  var ENTRA_EM = 0.82;   // precisa subir acima de 82% da altura da janela
+  var SAI_EM   = 0.10;   // e some ao passar de 10% do topo
+
+  function recalcular() {
+    var altura = window.innerHeight;
+    var alvos = document.querySelectorAll('[data-entrada]');
+    var leituras = [];
+
+    /* Primeiro só mede, depois só escreve: evita recalcular layout em loop. */
+    for (var i = 0; i < alvos.length; i++) {
+      var r = alvos[i].getBoundingClientRect();
+      leituras.push({ no: alvos[i], dentro: r.top < altura * ENTRA_EM && r.bottom > altura * SAI_EM });
+    }
+
+    leituras.forEach(function (l) {
+      var mudou = l.no.classList.contains(l.no.dataset.entrada) !== l.dentro;
+      if (!mudou) return;
+      l.no.classList.toggle(l.no.dataset.entrada, l.dentro);
+      if (l.no.dataset.entrada !== 'entregas--vistas') return;
+      /* Os números contam de novo a cada vez que a seção volta à tela. */
+      if (l.dentro) contarNumeros();
+      else jaContou = false;
     });
-  }
 
-  function revelar(alvo) {
-    if (!alvo || !alvo.dataset.entrada) return;
-    alvo.classList.add(alvo.dataset.entrada);
-    if (alvo.dataset.entrada === 'entregas--vistas') contarNumeros();
-  }
-
-  function pendente(n) {
-    return n.dataset.entrada && !n.classList.contains(n.dataset.entrada);
-  }
-
-  /* Revela o que a pessoa já alcançou, sem estragar o que ainda está por vir. */
-  function varrerAlcancados() {
-    document.querySelectorAll('[data-entrada]').forEach(function (n) {
-      if (pendente(n) && n.getBoundingClientRect().top < window.innerHeight * 0.92) revelar(n);
-    });
+    if (caixaLinha) {
+      var rl = caixaLinha.getBoundingClientRect();
+      var p = (altura * 0.62 - rl.top) / Math.max(1, rl.height);
+      caixaLinha.style.setProperty('--avanco', Math.min(1, Math.max(0, p)).toFixed(4));
+    }
   }
 
   function revelarTudo() {
-    document.querySelectorAll('[data-entrada]').forEach(revelar);
+    document.querySelectorAll('[data-entrada]').forEach(function (n) {
+      n.classList.add(n.dataset.entrada);
+    });
     revelarTitulo();
     if (indice) indice.classList.add('indice--pronto');
-    /* Se a contagem travou no meio, grava o valor final. */
     document.querySelectorAll('.entrega__valor[data-final]').forEach(function (n) {
       n.textContent = n.dataset.final;
     });
-    /* O avanço da linha não entra aqui: quem o mantém certo é a rolagem. */
+    if (caixaLinha) caixaLinha.style.setProperty('--avanco', '1');
   }
 
   /* O CSS só esconde depois que o mecanismo que revela está de pé.
      Se este trecho falhar, a página fica estática — nunca invisível. */
-  var podeAnimar = !paradoPorPreferencia && 'IntersectionObserver' in window;
-
-  if (!podeAnimar) {
+  if (paradoPorPreferencia) {
     revelarTudo();
   } else {
     raiz.classList.add('anim');
 
-    aoEntrar = new IntersectionObserver(function (entradas, obs) {
-      entradas.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        revelar(e.target);
-        obs.unobserve(e.target);
-      });
-    }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
-
-    document.querySelectorAll('[data-entrada]').forEach(function (n) { aoEntrar.observe(n); });
-
-    /* Um só tratador de rolagem: avança a linha do tempo e, de quebra,
-       serve de reserva caso o observador não tenha disparado para algo. */
     var agendado = false;
 
-    function naRolagem() {
+    function aoMover() {
       agendado = false;
-      if (caixaLinha) {
-        var r = caixaLinha.getBoundingClientRect();
-        var p = (window.innerHeight * 0.62 - r.top) / Math.max(1, r.height);
-        caixaLinha.style.setProperty('--avanco', Math.min(1, Math.max(0, p)).toFixed(4));
-      }
-      varrerAlcancados();
+      recalcular();
     }
 
     /* Usa o quadro de animação quando ele vem, mas não depende dele:
@@ -449,18 +443,19 @@
       if (agendado) return;
       agendado = true;
 
-      if (window.requestAnimationFrame) requestAnimationFrame(naRolagem);
-      setTimeout(function () { if (agendado) naRolagem(); }, 120);
+      if (window.requestAnimationFrame) requestAnimationFrame(aoMover);
+      setTimeout(function () { if (agendado) aoMover(); }, 120);
     }
 
     window.addEventListener('scroll', pedirQuadro, { passive: true });
     window.addEventListener('resize', pedirQuadro);
     window.addEventListener('hashchange', pedirQuadro);
+    window.addEventListener('load', pedirQuadro);
 
-    naRolagem();
+    recalcular();
     /* O layout final só existe depois das fontes e das imagens. */
-    setTimeout(naRolagem, 300);
-    window.addEventListener('load', naRolagem);
+    setTimeout(recalcular, 300);
+    setTimeout(recalcular, 1200);
 
     /* Uma sequência só: título sobe, índice entra atrás. */
     requestAnimationFrame(function () {
@@ -469,10 +464,6 @@
         if (indice) indice.classList.add('indice--pronto');
       });
     });
-
-    /* Rede de segurança: o que já está na tela aparece de qualquer jeito.
-       O que ainda está abaixo continua entrando conforme a rolagem. */
-    setTimeout(varrerAlcancados, 2000);
   }
 
   /* Os números sobem até o valor, preservando prefixo e sufixo do texto. */

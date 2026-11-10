@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gustavo Kazuo Momma — Cientista de dados, engenheiro de IA e desenvolvedor full-stack</title>
+<meta name="description" content="Cientista de dados, engenheiro de IA e desenvolvedor full-stack. Sistemas em produção em telemedicina, infraestrutura hospitalar e produtos SaaS.">
+<meta name="author" content="Gustavo Kazuo Momma">
+<meta name="theme-color" content="#E8ECF0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1420" media="(prefers-color-scheme: dark)">
+
+<meta property="og:type" content="profile">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Gustavo Kazuo Momma — Cientista de dados, engenheiro de IA e desenvolvedor full-stack">
+<meta property="og:description" content="Sistemas em produção em telemedicina, infraestrutura hospitalar e produtos SaaS.">
+<meta property="og:image" content="assets/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@85..125,400..700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+
+<script>
+/* Aplica o tema antes da primeira pintura para não haver piscada. */
+(function () {
+  try {
+    var s = localStorage.getItem('tema');
+    var d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.dataset.theme = s || (d ? 'dark' : 'light');
+  } catch (e) {}
+})();
+</script>
+</head>
+
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topo">
+  <div class="faixa">
+    <a class="marca" href="#inicio">
+      <span class="marca__sigla" aria-hidden="true">GM</span>
+      <span class="marca__nome">Gustavo Kazuo Momma</span>
+    </a>
+
+    <nav class="navegacao" aria-label="Seções da página">
+      <a href="#sistemas">Sistemas</a>
+      <a href="#stack">Stack</a>
+      <a href="#codigo">Código aberto</a>
+      <a href="#contato">Contato</a>
+    </nav>
+
+    <button class="tema" type="button" id="btn-tema" aria-pressed="false">
+      <span class="tema__icone" aria-hidden="true"></span>
+      <span class="tema__texto">Tema escuro</span>
+    </button>
+  </div>
+</header>
+
+<main id="conteudo">
+
+  <!-- ─────────── Abertura ─────────── -->
+  <section class="abertura" id="inicio">
+    <div class="envelope">
+      <p class="abertura__assinatura">Gustavo Kazuo Momma</p>
+
+      <h1 class="abertura__titulo">
+        Sistemas que entram em produção e continuam de pé.
+      </h1>
+
+      <p class="abertura__texto">
+        Cientista de dados, engenheiro de IA e desenvolvedor full-stack. Trabalho em
+        telemedicina, infraestrutura hospitalar e produtos SaaS — do modelo de dados
+        ao domínio que atende em produção.
+      </p>
+
+      <div class="abertura__acoes">
+        <a class="botao botao--forte" href="#sistemas">Ver os sistemas</a>
+        <a class="botao" href="https://github.com/Kazualkun" rel="me noopener" target="_blank">GitHub</a>
+        <a class="botao" href="https://www.linkedin.com/in/gustavo-momma" rel="me noopener" target="_blank">LinkedIn</a>
+      </div>
+
+      <!-- O índice de domínios é o objeto principal da abertura. -->
+      <div class="indice" role="list" aria-label="Sistemas em produção">
+        <a class="indice__linha" role="listitem" href="#imacardios" style="--marca: var(--c-imacardios)">
+          <span class="indice__dominio">imacardios.app.br</span>
+          <span class="indice__papel">Plataforma de telelaudos</span>
+          <span class="indice__escopo">Backend, frontend, banco e APIs</span>
+        </a>
+        <a class="indice__linha" role="listitem" href="#intranet" style="--marca: var(--c-hsf)">
+          <span class="indice__dominio">intranet.hospsaofrancisco.com.br</span>
+          <span class="indice__papel">Intranet hospitalar</span>
+          <span class="indice__escopo">Sistemas e infraestrutura crítica</span>
+        </a>
+        <a class="indice__linha" role="listitem" href="#toriitech" style="--marca: var(--c-torii)">
+          <span class="indice__dominio">toriitech.app.br</span>
+          <span class="indice__papel">Estúdio de produtos digitais</span>
+          <span class="indice__escopo">Site institucional e ecossistema</span>
+        </a>
+        <a class="indice__linha" role="listitem" href="#studio" style="--marca: var(--c-torii)">
+          <span class="indice__dominio">studio.toriitech.app.br</span>
+          <span class="indice__papel">SaaS de conteúdo com IA</span>
+          <span class="indice__escopo">Contas, painel e assistente</span>
+        </a>
+        <a class="indice__linha" role="listitem" href="#wardpoint" style="--marca: var(--c-wardpoint)">
+          <span class="indice__dominio">wardpoint.toriitech.app.br</span>
+          <span class="indice__papel">SaaS de análise de partidas</span>
+          <span class="indice__escopo">Web, assinatura e app desktop</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── Resumo ─────────── -->
+  <section class="bloco" id="resumo" aria-labelledby="t-resumo">
+    <div class="envelope bloco__grade">
+      <div class="trilho">
+        <h2 class="trilho__rotulo" id="t-resumo">Resumo</h2>
+      </div>
+      <div class="bloco__corpo">
+        <p class="prosa prosa--destaque">
+          Comecei pela engenharia de software e segui para dados e IA, e hoje trabalho
+          nos dois lados da mesma entrega: o modelo que decide e o sistema que coloca
+          essa decisão na frente de quem precisa dela.
+        </p>
+        <p class="prosa">
+          Na prática isso significa escrever o backend, modelar o banco, desenhar as APIs,
+          construir a interface e cuidar do DNS, do certificado e do domínio que sustentam
+          tudo isso. Meu dia a dia é em ambiente hospitalar, onde um sistema fora do ar
+          tem custo real, então trato disponibilidade, privacidade de dados e acessibilidade
+          como parte do requisito, não como ajuste posterior.
+        </p>
+        <p class="prosa">
+          Sou pós-graduado em Inteligência Artificial, Machine Learning e Ciência de Dados,
+          e tecnólogo em Sistemas para Internet pela FATEC.
+        </p>
+
+        <dl class="formacao">
+          <div class="formacao__item">
+            <dt>Pós-graduação</dt>
+            <dd>Inteligência Artificial, Machine Learning e Ciência de Dados</dd>
+          </div>
+          <div class="formacao__item">
+            <dt>Graduação</dt>
+            <dd>Tecnólogo em Sistemas para Internet — FATEC</dd>
+          </div>
+          <div class="formacao__item">
+            <dt>Atuação</dt>
+            <dd>Hospital São Francisco, São Roque — São Paulo, Brasil</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── Sistemas ─────────── -->
+  <section class="bloco bloco--sistemas" id="sistemas" aria-labelledby="t-sistemas">
+    <div class="envelope bloco__grade">
+      <div class="trilho">
+        <h2 class="trilho__rotulo" id="t-sistemas">Sistemas em produção</h2>
+        <p class="trilho__nota">Cinco aplicações no ar, com domínio próprio e usuários reais.</p>
+      </div>
+
+      <div class="bloco__corpo registros">
+
+        <!-- Imacardios -->
+        <article class="registro" id="imacardios" style="--marca: var(--c-imacardios)">
+          <div class="registro__texto">
+            <h3 class="registro__nome">IMACARDIOS</h3>
+            <a class="registro__dominio" href="https://imacardios.app.br" rel="noopener" target="_blank">imacardios.app.br</a>
+            <p class="registro__sobre">
+              Plataforma de telelaudos que conecta a unidade que faz o exame ao médico que
+              assina o laudo. Atuo no backend, no frontend, na modelagem do banco e nas APIs
+              que movem exame, laudo e assinatura entre as pontas.
+            </p>
+            <ul class="etiquetas">
+              <li>Telemedicina</li><li>APIs</li><li>Modelagem de dados</li><li>Full-stack</li>
+            </ul>
+          </div>
+          <div class="registro__visual">
+            <!-- Sem captura disponível: placa tipográfica com a identidade do sistema. -->
+            <div class="placa" aria-hidden="true">
+              <svg class="placa__traco" viewBox="0 0 320 90" fill="none" aria-hidden="true">
+                <path d="M0 58h74l12-30 14 56 13-70 15 86 13-42h26l10-16 11 32 9-16h113"
+                      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <p class="placa__dominio">imacardios.app.br</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Intranet HSF -->
+        <article class="registro" id="intranet" style="--marca: var(--c-hsf)">
+          <div class="registro__texto">
+            <h3 class="registro__nome">Intranet do Hospital São Francisco</h3>
+            <a class="registro__dominio" href="https://intranet.hospsaofrancisco.com.br" rel="noopener" target="_blank">intranet.hospsaofrancisco.com.br</a>
+            <p class="registro__sobre">
+              Portal do colaborador que reúne convênios, exames, ramais, ponto eletrônico,
+              manuais, protocolos, POPs, transferência de paciente e ficha anestésica em um
+              só lugar. É infraestrutura corporativa crítica: usada todos os dias, por turno,
+              dentro do hospital.
+            </p>
+            <ul class="etiquetas">
+              <li>Saúde</li><li>Infraestrutura</li><li>Área administrativa</li><li>LGPD</li>
+            </ul>
+          </div>
+          <div class="registro__visual">
+            <figure class="janela">
+              <img src="assets/img/intranet-hsf.webp" width="1600" height="769" loading="lazy" decoding="async"
+                   alt="Página inicial da Intranet HSF, com menu lateral de consultas e documentos e painel de comunicados.">
+            </figure>
+          </div>
+        </article>
+
+        <!-- Torii Tech -->
+        <article class="registro" id="toriitech" style="--marca: var(--c-torii)">
+          <div class="registro__texto">
+            <h3 class="registro__nome">Torii Tech</h3>
+            <a class="registro__dominio" href="https://toriitech.app.br" rel="noopener" target="_blank">toriitech.app.br</a>
+            <p class="registro__sobre">
+              Estúdio de produtos digitais e a base do ecossistema: sistemas, IA, automação,
+              aplicativos e sites construídos a partir da operação que o cliente já tem.
+              Daqui saem o Studio e o WardPoint, cada um no seu subdomínio.
+            </p>
+            <ul class="etiquetas">
+              <li>Next.js</li><li>Cloudflare</li><li>Design de interface</li>
+            </ul>
+          </div>
+          <div class="registro__visual">
+            <figure class="janela">
+              <img src="assets/img/toriitech.webp" width="1600" height="877" loading="lazy" decoding="async"
+                   alt="Página inicial da Torii Tech, com o título “Toda inovação começa quando alguém decide atravessar”.">
+            </figure>
+          </div>
+        </article>
+
+        <!-- Torii Studio -->
+        <article class="registro" id="studio" style="--marca: var(--c-torii)">
+          <div class="registro__texto">
+            <h3 class="registro__nome">Torii Studio</h3>
+            <a class="registro__dominio" href="https://studio.toriitech.app.br" rel="noopener" target="_blank">studio.toriitech.app.br</a>
+            <p class="registro__sobre">
+              SaaS que monta o mês de campanhas e posts de um negócio a partir da marca, do
+              público e das objeções de venda dele. Tem cadastro, painel mensal por pacote e
+              um assistente que responde só com o que está na página, em vez de inventar.
+            </p>
+            <ul class="etiquetas">
+              <li>SaaS</li><li>LLM</li><li>Autenticação</li><li>Assinaturas</li>
+            </ul>
+          </div>
+          <div class="registro__visual">
+            <figure class="janela">
+              <img src="assets/img/torii-studio.webp" width="1600" height="838" loading="lazy" decoding="async"
+                   alt="Página do Torii Studio, com o painel de campanhas do mês e o assistente de dúvidas aberto.">
+            </figure>
+          </div>
+        </article>
+
+        <!-- WardPoint -->
+        <article class="registro" id="wardpoint" style="--marca: var(--c-wardpoint)">
+          <div class="registro__texto">
+            <h3 class="registro__nome">WardPoint</h3>
+            <a class="registro__dominio" href="https://wardpoint.toriitech.app.br" rel="noopener" target="_blank">wardpoint.toriitech.app.br</a>
+            <p class="registro__sobre">
+              Produto de assinatura que revisa cada partida do jogador e aponta, no segundo
+              exato do replay, o erro que custou a vitória. Envolve análise sobre dados de
+              partida, aplicação desktop para Windows e o fluxo de cobrança recorrente.
+            </p>
+            <ul class="etiquetas">
+              <li>Análise de dados</li><li>App desktop</li><li>Pagamento recorrente</li>
+            </ul>
+          </div>
+          <div class="registro__visual">
+            <figure class="janela">
+              <img src="assets/img/wardpoint.webp" width="1600" height="817" loading="lazy" decoding="async"
+                   alt="Página do WardPoint, com o título “Suba de elo enxergando o que você não via” e um replay de partida anotado.">
+            </figure>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── Stack ─────────── -->
+  <section class="bloco" id="stack" aria-labelledby="t-stack">
+    <div class="envelope bloco__grade">
+      <div class="trilho">
+        <h2 class="trilho__rotulo" id="t-stack">Stack técnica</h2>
+        <p class="trilho__nota">O que uso para construir e manter o que está acima.</p>
+      </div>
+
+      <div class="bloco__corpo">
+        <dl class="stack">
+          <div class="stack__grupo">
+            <dt>Linguagens</dt>
+            <dd><span>Python</span><span>JavaScript</span><span>TypeScript</span><span>PHP</span><span>SQL</span><span>HTML5</span><span>CSS3</span></dd>
+          </div>
+          <div class="stack__grupo">
+            <dt>Frameworks e bibliotecas</dt>
+            <dd><span>React</span><span>Next.js</span><span>Node.js</span></dd>
+          </div>
+          <div class="stack__grupo">
+            <dt>Bancos de dados</dt>
+            <dd><span>PostgreSQL</span><span>MySQL</span><span>Oracle Database</span><span>Neon</span></dd>
+          </div>
+          <div class="stack__grupo">
+            <dt>Cloud e infraestrutura</dt>
+            <dd><span>Cloudflare — DNS</span><span>SSL/TLS</span><span>Edge computing</span><span>Domínios e subdomínios</span><span>Google Cloud Platform</span><span>Cloud Storage</span></dd>
+          </div>
+          <div class="stack__grupo">
+            <dt>IA e automação</dt>
+            <dd><span>AI Skills customizadas</span><span>LLMs locais e self-hosted</span><span>Modelos open-source</span><span>Automação de rotinas</span></dd>
+          </div>
+          <div class="stack__grupo">
+            <dt>Engenharia e conformidade</dt>
+            <dd><span>Code review automatizado</span><span>LGPD</span><span>CDC</span><span>Acessibilidade</span></dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── Repositórios ─────────── -->
+  <section class="bloco" id="codigo" aria-labelledby="t-codigo">
+    <div class="envelope bloco__grade">
+      <div class="trilho">
+        <h2 class="trilho__rotulo" id="t-codigo">Código aberto</h2>
+        <p class="trilho__nota">Repositórios públicos, lidos direto do GitHub.</p>
+      </div>
+
+      <div class="bloco__corpo">
+        <ul class="repos" id="repos" aria-busy="true" aria-live="polite">
+          <li class="repos__carregando">Carregando repositórios…</li>
+        </ul>
+        <a class="botao" href="https://github.com/Kazualkun?tab=repositories" rel="noopener" target="_blank">Ver todos no GitHub</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ─────────── Rodapé ─────────── -->
+<footer class="rodape" id="contato">
+  <div class="envelope rodape__grade">
+    <div>
+      <p class="rodape__chamada">Disponível para projetos e conversas técnicas.</p>
+      <p class="rodape__nome">Gustavo Kazuo Momma</p>
+      <p class="rodape__papel">Cientista de dados, engenheiro de IA e desenvolvedor full-stack — São Paulo, Brasil</p>
+    </div>
+
+    <ul class="contatos">
+      <li>
+        <a href="https://github.com/Kazualkun" rel="me noopener" target="_blank">
+          <span>GitHub</span><span class="contatos__alvo">Kazualkun</span>
+        </a>
+      </li>
+      <li>
+        <!-- Confirme o endereço do seu perfil do LinkedIn. -->
+        <a href="https://www.linkedin.com/in/gustavo-momma" rel="me noopener" target="_blank">
+          <span>LinkedIn</span><span class="contatos__alvo">gustavo-momma</span>
+        </a>
+      </li>
+      <li>
+        <!-- Troque pelo e-mail que você quer publicar. -->
+        <a href="mailto:contato@exemplo.com">
+          <span>E-mail</span><span class="contatos__alvo">contato@exemplo.com</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="envelope rodape__base">
+    <p>Página construída à mão, sem framework, publicada no GitHub Pages.</p>
+    <p><span id="ano">2026</span></p>
+  </div>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Gustavo Kazuo Momma",
+  "jobTitle": "Cientista de dados, engenheiro de IA e desenvolvedor full-stack",
+  "address": { "@type": "PostalAddress", "addressRegion": "SP", "addressCountry": "BR" },
+  "worksFor": { "@type": "Organization", "name": "Hospital São Francisco, São Roque" },
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "FATEC" },
+  "knowsAbout": ["Ciência de dados","Machine Learning","Engenharia de IA","Desenvolvimento full-stack","Cloudflare","PostgreSQL","Next.js","LGPD"],
+  "sameAs": ["https://github.com/Kazualkun"]
+}
+</script>
+
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>

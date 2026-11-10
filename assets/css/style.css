@@ -32,9 +32,10 @@
   --t-min:   0.875rem;
   --t-base:  1.0625rem;
   --t-med:   1.1875rem;
-  --t-gr:    clamp(1.3rem, 1.05rem + 1.1vw, 1.75rem);
-  --t-maior: clamp(1.6rem, 1.3rem + 1.4vw, 2.1rem);
-  --t-mostra: clamp(2.3rem, 1.25rem + 4.6vw, 4.35rem);
+  --t-gr:    clamp(1.45rem, 1.05rem + 1.7vw, 2.15rem);
+  --t-secao: clamp(1.9rem, 1.15rem + 2.7vw, 3.15rem);
+  --t-maior: clamp(1.7rem, 1.35rem + 1.6vw, 2.35rem);
+  --t-mostra: clamp(2.5rem, 1.2rem + 5.2vw, 5rem);
 
   /* Ritmo */
   --gutter: clamp(1.25rem, 5vw, 2.75rem);
@@ -439,11 +440,11 @@ a { color: inherit; text-decoration: none; }
   bottom: 0.35rem;
   width: 1px;
   background: var(--linha);
-  transform: scaleY(0);
   transform-origin: 50% 0;
   transition: transform .9s cubic-bezier(.3,.7,.3,1);
 }
-.linha--vista::before { transform: scaleY(1); }
+.anim .linha::before { transform: scaleY(0); }
+.anim .linha--vista::before { transform: scaleY(1); }
 
 /* A trajetória é montada por JavaScript: sem ele, não mostra seção vazia. */
 html:not(.js) #trajetoria { display: none; }
@@ -523,39 +524,51 @@ html:not(.js) #trajetoria { display: none; }
 .bloco { padding-block: var(--salto); border-top: 1px solid var(--linha-fina); }
 .bloco--faixa { background: var(--papel-rec); }
 
-.bloco__grade { display: grid; gap: clamp(2rem, 4vw, 3rem); }
+/* O título ocupa a largura inteira: é o momento tipográfico da seção. */
+.bloco__grade { display: grid; gap: clamp(2.25rem, 4vw, 3.25rem); }
 
-@media (min-width: 62rem) {
-  .bloco__grade { grid-template-columns: minmax(10rem, 15rem) minmax(0, 1fr); gap: clamp(3rem, 5vw, 5rem); }
-  .trilho { position: sticky; top: 6rem; align-self: start; }
-
-  /* As capturas são a prova do trabalho: esta seção usa a largura inteira. */
-  .bloco--largo .bloco__grade { grid-template-columns: minmax(0, 1fr); gap: clamp(2.5rem, 4vw, 3.5rem); }
-  .bloco--largo .trilho {
-    position: static;
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 2.5rem;
-    padding-bottom: 1.1rem;
-    border-bottom: 1px solid var(--linha);
-  }
-  .bloco--largo .trilho__nota { margin-top: 0; max-width: 36ch; text-align: right; }
+.trilho {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 2.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--linha-fina);
 }
 
+/* Régua de tinta que se desenha quando a seção entra. */
+.trilho::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--tinta);
+  transform-origin: 0 50%;
+  transition: transform 1s cubic-bezier(.3,.7,.3,1);
+}
+.anim .trilho::after { transform: scaleX(0); }
+.anim .bloco--visto .trilho::after { transform: scaleX(1); }
+
 .trilho__rotulo {
-  font-size: var(--t-gr);
-  font-weight: 600;
-  font-variation-settings: "wdth" 104;
-  letter-spacing: -0.025em;
+  font-size: var(--t-secao);
+  font-weight: 700;
+  font-variation-settings: "wdth" 108;
+  letter-spacing: -0.035em;
 }
 
 .trilho__nota {
-  margin-top: 0.75rem;
   font-size: var(--t-min);
   color: var(--tinta-3);
-  max-width: 28ch;
+  max-width: 34ch;
   line-height: 1.5;
+}
+
+@media (min-width: 52rem) {
+  .trilho__nota { text-align: right; }
 }
 
 /* ---------- Prosa ---------- */
@@ -596,7 +609,7 @@ html:not(.js) #trajetoria { display: none; }
 
 @media (min-width: 56rem) {
   .registro {
-    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.12fr);
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
     gap: clamp(2.5rem, 4vw, 4.5rem);
     align-items: center;
   }
@@ -655,38 +668,64 @@ html:not(.js) #trajetoria { display: none; }
   background: color-mix(in srgb, var(--superficie) 70%, transparent);
 }
 
-/* Captura de tela tratada como janela real. */
+/* Captura de tela tratada como janela real, e clicável para o sistema no ar. */
+.registro__visual { display: block; }
+
 .janela {
   margin: 0;
   border: 1px solid var(--linha);
   border-radius: 10px;
   overflow: hidden;
   background: var(--superficie);
-  box-shadow: 0 1px 2px rgb(var(--sombra) / .07), 0 14px 34px -14px rgb(var(--sombra) / .22);
+  box-shadow: 0 1px 2px rgb(var(--sombra) / .07), 0 16px 38px -16px rgb(var(--sombra) / .26);
+  transition: box-shadow .4s cubic-bezier(.3,.7,.3,1), border-color .4s, transform .4s cubic-bezier(.3,.7,.3,1);
 }
 /* Sem recorte: cada captura aparece inteira, como o sistema é de verdade. */
-.janela img { width: 100%; height: auto; }
+.janela img { width: 100%; height: auto; display: block; }
 
-/* ---------- Stack ---------- */
-.stack { border-top: 1px solid var(--linha); }
+/* A imagem se desenha de baixo para cima quando entra em vista.
+   Guardado por reduced-motion para nunca esconder a captura sem querer. */
+.anim .janela img { clip-path: inset(0 0 100% 0); transition: clip-path 1.05s cubic-bezier(.3,.75,.3,1); }
+.anim .registro--visto .janela img { clip-path: inset(0 0 0 0); }
+
+@media (hover: hover) {
+  .registro__visual:hover .janela {
+    transform: translateY(-5px);
+    border-color: color-mix(in srgb, var(--marca) 55%, var(--linha));
+    box-shadow: 0 2px 4px rgb(var(--sombra) / .08), 0 26px 52px -18px rgb(var(--sombra) / .34);
+  }
+}
+
+/* ---------- Stack ----------
+   Cada categoria diz para que serve, não só o que é. */
+.stack { display: grid; gap: 1px; background: var(--linha-fina); border-block: 1px solid var(--linha-fina); }
 
 .stack__grupo {
   display: grid;
-  gap: 0.75rem 2.5rem;
-  padding: 1.5rem 0;
-  border-bottom: 1px solid var(--linha-fina);
+  gap: 0.6rem 2.5rem;
+  padding: 1.6rem 0;
+  background: var(--papel-rec);
 }
 
-.stack__grupo dt {
-  font-size: var(--t-min);
+.stack__nome {
+  font-size: var(--t-med);
   font-weight: 600;
   color: var(--tinta);
-  letter-spacing: -0.012em;
+  letter-spacing: -0.022em;
 }
 
-.stack__grupo dd { display: flex; flex-wrap: wrap; gap: 0.45rem 0.5rem; }
+.stack__corpo { display: grid; gap: 0.9rem; }
 
-.stack__grupo dd span {
+.stack__como {
+  font-size: var(--t-min);
+  color: var(--tinta-2);
+  max-width: 56ch;
+  line-height: 1.5;
+}
+
+.stack__itens { display: flex; flex-wrap: wrap; gap: 0.4rem 0.45rem; }
+
+.stack__itens li {
   padding: 0.3rem 0.7rem;
   background: var(--superficie);
   border: 1px solid var(--linha-fina);
@@ -695,7 +734,7 @@ html:not(.js) #trajetoria { display: none; }
 }
 
 @media (min-width: 48rem) {
-  .stack__grupo { grid-template-columns: 14rem minmax(0, 1fr); align-items: start; }
+  .stack__grupo { grid-template-columns: 15rem minmax(0, 1fr); align-items: start; padding-inline: 0; }
 }
 
 /* ---------- Repositórios ---------- */
@@ -783,18 +822,33 @@ html:not(.js) #trajetoria { display: none; }
 }
 .rodape__base p { margin: 0; }
 
-/* ---------- Entrada orquestrada (um único momento) ---------- */
-@media (prefers-reduced-motion: no-preference) {
-  .js .indice__linha { opacity: 0; translate: 0 10px; }
-  .js .indice--pronto .indice__linha {
-    animation: surgir .5s cubic-bezier(.2,.7,.3,1) forwards;
-    animation-delay: calc(var(--i, 0) * 70ms);
-  }
+/* ---------- Abertura: uma sequência só ----------
+   O título sobe palavra a palavra e o índice entra em seguida. */
+.pal {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  /* Espaço para as descidas de ç, ã, p e g não serem cortadas. */
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+.pal > span { display: inline-block; will-change: transform; }
+
+.anim .abertura__titulo.partido .pal > span { transform: translateY(110%); }
+.anim .abertura__titulo.revelar .pal > span {
+  animation: subir .7s cubic-bezier(.22,.9,.28,1) forwards;
+  animation-delay: calc(var(--p, 0) * 34ms);
 }
 
-@keyframes surgir {
-  to { opacity: 1; translate: 0 0; }
+.anim .indice__linha { opacity: 0; translate: 0 10px; }
+.anim .indice--pronto .indice__linha {
+  animation: surgir .45s cubic-bezier(.2,.7,.3,1) forwards;
+  /* Entra logo atrás do título, sem atrasar a leitura. */
+  animation-delay: calc(200ms + var(--i, 0) * 55ms);
 }
+
+@keyframes subir  { to { transform: translateY(0); } }
+@keyframes surgir { to { opacity: 1; translate: 0 0; } }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

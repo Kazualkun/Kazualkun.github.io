@@ -170,7 +170,7 @@
   </section>
 
   <!-- ─────────── Sistemas ─────────── -->
-  <section class="bloco bloco--faixa bloco--largo" id="sistemas" aria-labelledby="t-sistemas">
+  <section class="bloco bloco--faixa" id="sistemas" aria-labelledby="t-sistemas">
     <div class="envelope bloco__grade">
       <div class="trilho">
         <h2 class="trilho__rotulo" id="t-sistemas" data-i18n="sis.rotulo">Sistemas em produção</h2>
@@ -202,12 +202,12 @@
               <li>LGPD</li>
             </ul>
           </div>
-          <div class="registro__visual">
+          <a class="registro__visual" href="https://app.imacardios.com" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
             <figure class="janela">
               <img src="assets/img/imacardios.webp" width="1600" height="841" loading="lazy" decoding="async"
                    alt="Página do Imacardios, com o título “O centro de comando da telecardiologia” e um painel de operações mostrando traçado de ECG e filas de exames pendentes.">
             </figure>
-          </div>
+          </a>
         </article>
 
         <article class="registro" id="intranet" style="--marca: var(--c-hsf)">
@@ -230,12 +230,12 @@
               <li>LGPD</li>
             </ul>
           </div>
-          <div class="registro__visual">
+          <a class="registro__visual" href="https://intranet.hospsaofrancisco.com.br" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
             <figure class="janela">
               <img src="assets/img/intranet-hsf.webp" width="1600" height="769" loading="lazy" decoding="async"
                    alt="Página inicial da Intranet HSF, com menu lateral de consultas e documentos e painel de comunicados.">
             </figure>
-          </div>
+          </a>
         </article>
 
         <article class="registro" id="toriitech" style="--marca: var(--c-torii)">
@@ -256,12 +256,12 @@
               <li data-i18n="tag.design">Design de interface</li>
             </ul>
           </div>
-          <div class="registro__visual">
+          <a class="registro__visual" href="https://toriitech.app.br" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
             <figure class="janela">
               <img src="assets/img/toriitech.webp" width="1600" height="877" loading="lazy" decoding="async"
                    alt="Página inicial da Torii Tech, com o título “Toda inovação começa quando alguém decide atravessar”.">
             </figure>
-          </div>
+          </a>
         </article>
 
         <article class="registro" id="studio" style="--marca: var(--c-torii)">
@@ -283,12 +283,12 @@
               <li data-i18n="tag.assinaturas">Assinaturas</li>
             </ul>
           </div>
-          <div class="registro__visual">
+          <a class="registro__visual" href="https://studio.toriitech.app.br" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
             <figure class="janela">
               <img src="assets/img/torii-studio.webp" width="1600" height="838" loading="lazy" decoding="async"
                    alt="Página do Torii Studio, com o painel de campanhas do mês e o assistente de dúvidas aberto.">
             </figure>
-          </div>
+          </a>
         </article>
 
         <article class="registro" id="wardpoint" style="--marca: var(--c-wardpoint)">
@@ -309,12 +309,12 @@
               <li data-i18n="tag.recorrente">Pagamento recorrente</li>
             </ul>
           </div>
-          <div class="registro__visual">
+          <a class="registro__visual" href="https://wardpoint.toriitech.app.br" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
             <figure class="janela">
               <img src="assets/img/wardpoint.webp" width="1600" height="817" loading="lazy" decoding="async"
                    alt="Página do WardPoint, com o título “Suba de elo enxergando o que você não via” e um replay de partida anotado.">
             </figure>
-          </div>
+          </a>
         </article>
 
       </div>
@@ -346,32 +346,114 @@
       <div class="bloco__corpo">
         <dl class="stack">
           <div class="stack__grupo">
-            <dt data-i18n="stack.linguagens">Linguagens</dt>
-            <dd><span>Python</span><span>JavaScript</span><span>TypeScript</span><span>PHP</span><span>SQL</span><span>C++</span><span>C#</span><span>HTML5</span><span>CSS3</span></dd>
+            <dt class="stack__nome" data-i18n="stack.linguagens">Linguagens</dt>
+            <dd class="stack__corpo">
+              <p class="stack__como" data-i18n="desc.linguagens">Python para modelo e análise, TypeScript do backend ao frontend.</p>
+              <ul class="stack__itens">
+                <li>Python</li>
+                <li>TypeScript</li>
+                <li>JavaScript</li>
+                <li>SQL</li>
+                <li>PHP</li>
+                <li>C++</li>
+                <li>C#</li>
+                <li>HTML5</li>
+                <li>CSS3</li>
+              </ul>
+            </dd>
           </div>
           <div class="stack__grupo">
-            <dt data-i18n="stack.ml">Machine learning e dados</dt>
-            <dd><span>Pandas</span><span>NumPy</span><span>scikit-learn</span><span>TensorFlow</span><span>PyTorch</span><span data-i18n="stack.supervisionado">Aprendizado supervisionado e não supervisionado</span><span data-i18n="stack.nlp">Processamento de linguagem natural</span><span data-i18n="stack.features">Engenharia de features</span><span data-i18n="stack.viz">Visualização de dados</span></dd>
+            <dt class="stack__nome" data-i18n="stack.ml">Machine learning e dados</dt>
+            <dd class="stack__corpo">
+              <p class="stack__como" data-i18n="desc.ml">Do tratamento dos dados ao modelo treinado e avaliado.</p>
+              <ul class="stack__itens">
+                <li>Pandas</li>
+                <li>NumPy</li>
+                <li>scikit-learn</li>
+                <li>TensorFlow</li>
+                <li>PyTorch</li>
+                <li data-i18n="stack.supervisionado">Aprendizado supervisionado e não supervisionado</li>
+                <li data-i18n="stack.nlp">Processamento de linguagem natural</li>
+                <li data-i18n="stack.features">Engenharia de features</li>
+                <li data-i18n="stack.viz">Visualização de dados</li>
+              </ul>
+            </dd>
           </div>
           <div class="stack__grupo">
-            <dt data-i18n="stack.frameworks">Frameworks e bibliotecas</dt>
-            <dd><span>Node.js</span><span>React</span><span>Next.js</span><span>Angular</span></dd>
+            <dt class="stack__nome" data-i18n="stack.frameworks">Frameworks e bibliotecas</dt>
+            <dd class="stack__corpo">
+              <p class="stack__como" data-i18n="desc.frameworks">Angular no Imacardios, Next.js na Torii Tech, Node.js nos backends.</p>
+              <ul class="stack__itens">
+                <li>Node.js</li>
+                <li>Angular</li>
+                <li>React</li>
+                <li>Next.js</li>
+              </ul>
+            </dd>
           </div>
           <div class="stack__grupo">
-            <dt data-i18n="stack.bancos">Bancos de dados</dt>
-            <dd><span>PostgreSQL</span><span>MySQL</span><span>Oracle Database</span><span>Neon</span></dd>
+            <dt class="stack__nome" data-i18n="stack.bancos">Bancos de dados</dt>
+            <dd class="stack__corpo">
+              <p class="stack__como" data-i18n="desc.bancos">Modelagem desde o primeiro diagrama, nos cinco sistemas.</p>
+              <ul class="stack__itens">
+                <li>PostgreSQL</li>
+                <li>MySQL</li>
+                <li>Oracle Database</li>
+                <li>Neon</li>
+              </ul>
+            </dd>
           </div>
           <div class="stack__grupo">
-            <dt data-i18n="stack.cloud">Cloud e infraestrutura</dt>
-            <dd><span>Cloudflare DNS</span><span>SSL/TLS</span><span>Edge computing</span><span data-i18n="stack.dominios">Domínios e subdomínios</span><span>Google Cloud Platform</span><span>Cloud Storage</span><span data-i18n="stack.redes">Administração de redes</span><span data-i18n="stack.servidor">Hardware de servidor</span></dd>
+            <dt class="stack__nome" data-i18n="stack.seguranca">Segurança e acesso</dt>
+            <dd class="stack__corpo">
+              <p class="stack__como" data-i18n="desc.seguranca">Autenticação e sessão em plataformas que lidam com dado de paciente.</p>
+              <ul class="stack__itens">
+                <li>JWT</li>
+                <li>OAuth2</li>
+                <li>MFA</li>
+                <li data-i18n="stack.rbac">Controle de acesso por papel</li>
+              </ul>
+            </dd>
           </div>
           <div class="stack__grupo">
-            <dt data-i18n="stack.iaauto">IA e automação</dt>
-            <dd><span data-i18n="stack.skills">AI Skills customizadas</span><span data-i18n="stack.llms">LLMs locais e self-hosted</span><span data-i18n="stack.open">Modelos open-source</span><span data-i18n="stack.rotinas">Automação de rotinas</span></dd>
+            <dt class="stack__nome" data-i18n="stack.cloud">Cloud e infraestrutura</dt>
+            <dd class="stack__corpo">
+              <p class="stack__como" data-i18n="desc.cloud">DNS, certificado e domínio de tudo que está no ar.</p>
+              <ul class="stack__itens">
+                <li>Cloudflare DNS</li>
+                <li>SSL/TLS</li>
+                <li>Edge computing</li>
+                <li data-i18n="stack.dominios">Domínios e subdomínios</li>
+                <li>Google Cloud Platform</li>
+                <li>Cloud Storage</li>
+                <li data-i18n="stack.redes">Administração de redes</li>
+                <li data-i18n="stack.servidor">Hardware de servidor</li>
+              </ul>
+            </dd>
           </div>
           <div class="stack__grupo">
-            <dt data-i18n="stack.eng">Engenharia e conformidade</dt>
-            <dd><span data-i18n="stack.review">Code review automatizado</span><span>LGPD</span><span>CDC</span><span data-i18n="stack.a11y">Acessibilidade</span></dd>
+            <dt class="stack__nome" data-i18n="stack.iaauto">IA e automação</dt>
+            <dd class="stack__corpo">
+              <p class="stack__como" data-i18n="desc.iaauto">Ferramentas próprias e modelos rodando na minha máquina.</p>
+              <ul class="stack__itens">
+                <li data-i18n="stack.skills">AI Skills customizadas</li>
+                <li data-i18n="stack.llms">LLMs locais e self-hosted</li>
+                <li data-i18n="stack.open">Modelos open-source</li>
+                <li data-i18n="stack.rotinas">Automação de rotinas</li>
+              </ul>
+            </dd>
+          </div>
+          <div class="stack__grupo">
+            <dt class="stack__nome" data-i18n="stack.eng">Engenharia e conformidade</dt>
+            <dd class="stack__corpo">
+              <p class="stack__como" data-i18n="desc.eng">O que a entrega precisa cumprir antes de ir para produção.</p>
+              <ul class="stack__itens">
+                <li data-i18n="stack.review">Code review automatizado</li>
+                <li>LGPD</li>
+                <li>CDC</li>
+                <li data-i18n="stack.a11y">Acessibilidade</li>
+              </ul>
+            </dd>
           </div>
         </dl>
       </div>

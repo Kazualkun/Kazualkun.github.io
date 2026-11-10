@@ -79,6 +79,8 @@
     montarTrajetoria();
     montarLeituras();
     montarRepos();
+    /* Depois de trocar o texto, o título é redividido em palavras. */
+    partirTitulo();
   }
 
   document.querySelectorAll('.idioma button').forEach(function (b) {
@@ -318,24 +320,131 @@
       montarRepos();
     });
 
-  /* ---------- Entrada do índice (o único movimento automático) ---------- */
+  /* ---------- Movimento ---------- */
+  var paradoPorPreferencia = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* O título vira uma palavra por caixa, para subirem em sequência. */
+  var titulo = document.querySelector('.abertura__titulo');
+
+  function partirTitulo() {
+    if (!titulo) return;
+    var palavras = titulo.textContent.trim().split(/\s+/);
+    titulo.textContent = '';
+    palavras.forEach(function (palavra, i) {
+      var caixa = criar('span', 'pal');
+      caixa.style.setProperty('--p', String(i));
+      caixa.appendChild(criar('span', null, palavra));
+      titulo.appendChild(caixa);
+      if (i < palavras.length - 1) titulo.appendChild(document.createTextNode(' '));
+    });
+    titulo.classList.add('partido');
+  }
+
+  function revelarTitulo() {
+    if (titulo) titulo.classList.add('revelar');
+  }
+
   var indice = document.querySelector('.indice');
   if (indice) {
     indice.querySelectorAll('.indice__linha').forEach(function (n, i) {
       n.style.setProperty('--i', String(i));
     });
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () { indice.classList.add('indice--pronto'); });
+  }
+
+  /* Marca os alvos antes de qualquer coisa esconder nada. */
+  function marcar(seletor, classe) {
+    document.querySelectorAll(seletor).forEach(function (n) { n.dataset.entrada = classe; });
+  }
+  marcar('.bloco', 'bloco--visto');
+  marcar('.registro', 'registro--visto');
+  if (caixaLinha) caixaLinha.dataset.entrada = 'linha--vista';
+  if (caixaLeituras) caixaLeituras.dataset.entrada = 'leituras--vistas';
+
+  function revelar(alvo) {
+    if (!alvo || !alvo.dataset.entrada) return;
+    alvo.classList.add(alvo.dataset.entrada);
+    if (alvo.dataset.entrada === 'leituras--vistas') contarNumeros();
+  }
+
+  function revelarTudo() {
+    document.querySelectorAll('[data-entrada]').forEach(revelar);
+    revelarTitulo();
+    if (indice) indice.classList.add('indice--pronto');
+    /* Se a contagem travou no meio, grava o valor final. */
+    document.querySelectorAll('.leitura__valor[data-final]').forEach(function (n) {
+      n.textContent = n.dataset.final;
     });
   }
 
-  /* ---------- A linha do tempo cresce quando entra em vista ---------- */
-  if (caixaLinha && 'IntersectionObserver' in window) {
-    new IntersectionObserver(function (entradas, obs) {
+  /* O CSS só esconde depois que o mecanismo que revela está de pé.
+     Se este trecho falhar, a página fica estática — nunca invisível. */
+  var podeAnimar = !paradoPorPreferencia && 'IntersectionObserver' in window;
+
+  if (!podeAnimar) {
+    revelarTudo();
+  } else {
+    raiz.classList.add('anim');
+
+    var aoEntrar = new IntersectionObserver(function (entradas, obs) {
       entradas.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('linha--vista'); obs.unobserve(e.target); }
+        if (!e.isIntersecting) return;
+        revelar(e.target);
+        obs.unobserve(e.target);
       });
-    }, { threshold: 0.12 }).observe(caixaLinha);
+    }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
+
+    document.querySelectorAll('[data-entrada]').forEach(function (n) { aoEntrar.observe(n); });
+
+    /* Uma sequência só: título sobe, índice entra atrás. */
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        revelarTitulo();
+        if (indice) indice.classList.add('indice--pronto');
+      });
+    });
+
+    /* Rede de segurança: nada fica escondido por mais de dois segundos e meio. */
+    setTimeout(revelarTudo, 2500);
+  }
+
+  /* Os números sobem até o valor, preservando prefixo e sufixo do texto. */
+  var jaContou = false;
+
+  function contarNumeros() {
+    if (jaContou || paradoPorPreferencia || !caixaLeituras) return;
+    jaContou = true;
+
+    caixaLeituras.querySelectorAll('.leitura__valor').forEach(function (n) {
+      var texto = n.textContent;
+      var casado = texto.match(/^(\D*)([\d.,]+)(\D*)$/);
+      if (!casado) return;
+
+      var cru = casado[2];
+      var alvo = parseInt(cru.replace(/\D/g, ''), 10);
+      if (!isFinite(alvo) || alvo === 0) return;
+
+      var separador = cru.indexOf('.') > -1 ? '.' : (cru.indexOf(',') > -1 ? ',' : '');
+      var inicio = null;
+      var duracao = 1100;
+
+      function formatar(v) {
+        var s = String(v);
+        if (separador && alvo >= 1000) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, separador);
+        return casado[1] + s + casado[3];
+      }
+
+      function passo(agora) {
+        if (inicio === null) inicio = agora;
+        var p = Math.min(1, (agora - inicio) / duracao);
+        var suave = 1 - Math.pow(1 - p, 4);
+        n.textContent = formatar(Math.round(alvo * suave));
+        if (p < 1) requestAnimationFrame(passo);
+      }
+
+      /* Sem zerar antes da hora: se o rAF não rodar, o número fica no valor certo. */
+      n.dataset.final = texto;
+      requestAnimationFrame(passo);
+    });
   }
 
   /* ---------- Ano ---------- */

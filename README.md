@@ -1,75 +1,50 @@
-# Portfólio — Gustavo Kazuo Momma
+# Gustavo Kazuo Momma
 
-Página pessoal estática: HTML, CSS e JavaScript escritos à mão, sem framework e sem
-etapa de build. Publica direto no GitHub Pages.
+Cientista de dados, engenheiro de IA e desenvolvedor full-stack.
 
-## Publicar no GitHub Pages
+Este repositório é o código do meu portfólio: **https://kazualkun.github.io**
 
-```bash
-git init
-git add .
-git commit -m "Portfólio"
-git branch -M main
-git remote add origin https://github.com/Kazualkun/Kazualkun.github.io.git
-git push -u origin main
-```
+## Sobre mim
 
-Depois abra **Settings → Pages** no repositório e aponte *Source* para a branch `main`,
-pasta `/ (root)`. Em um ou dois minutos a página responde em `https://kazualkun.github.io`.
+Pós-graduado em Inteligência Artificial, Machine Learning e Ciência de Dados, e tecnólogo
+em Sistemas para Internet pela FATEC. Trabalho nos dois lados da mesma entrega: o modelo
+que decide e o sistema que coloca essa decisão na frente de quem precisa dela. Atuo no
+Hospital São Francisco, em São Roque (SP).
 
-Para atualizar a página depois de qualquer mudança:
+## Sistemas em produção
 
-```bash
-git add .
-git commit -m "Descrição da mudança"
-git push
-```
+| Sistema | Endereço | O que é |
+| --- | --- | --- |
+| IMACARDIOS | app.imacardios.com | Telecardiologia e laudos remotos. Backend, frontend, modelagem de banco e APIs. |
+| Intranet HSF | intranet.hospsaofrancisco.com.br | Portal do colaborador do Hospital São Francisco. |
+| Torii Tech | toriitech.app.br | Estúdio de produtos digitais e base do ecossistema. |
+| Torii Studio | studio.toriitech.app.br | SaaS de campanhas e posts com assistente de IA. |
+| WardPoint | wardpoint.toriitech.app.br | SaaS de análise de partidas com app desktop. |
 
-## Rodar localmente
+## Stack
 
-```bash
-python -m http.server 8000
-```
+- **Linguagens:** Python, JavaScript, TypeScript, PHP, SQL, HTML5, CSS3
+- **Frameworks:** React, Next.js, Node.js
+- **Bancos de dados:** PostgreSQL, MySQL, Oracle Database, Neon
+- **Cloud e infraestrutura:** Cloudflare (DNS, SSL/TLS, edge), Google Cloud Platform
+- **IA e automação:** AI Skills customizadas, LLMs locais e self-hosted
+- **Engenharia e conformidade:** code review automatizado, LGPD, CDC, acessibilidade
 
-Depois abra `http://localhost:8000`. Abrir o `index.html` direto pelo sistema de arquivos
-também funciona, mas a busca de repositórios no GitHub só responde servida por HTTP.
+## Sobre este portfólio
 
-## Único ajuste opcional depois de publicar
-
-A tag `og:image` no `index.html` usa caminho relativo. WhatsApp e LinkedIn só mostram a
-pré-visualização com URL absoluta, então, depois do primeiro deploy, troque para:
-
-```html
-<meta property="og:image" content="https://kazualkun.github.io/assets/img/og.png">
-```
-
-## Estrutura
+Página estática em HTML, CSS e JavaScript puros, sem framework e sem dependências além das
+fontes do Google Fonts. Tem tema claro e escuro, e a seção de código aberto lê os
+repositórios públicos direto da API do GitHub.
 
 ```
-index.html            página inteira
-assets/css/style.css  tokens de cor e tipografia, tema claro e escuro
-assets/js/main.js     tema, entrada da abertura e repositórios do GitHub
-assets/img/           capturas dos sistemas (WebP) e imagem de pré-visualização
-assets/favicon.svg    monograma, adapta ao tema do sistema
-prints/               capturas originais em PNG, fonte das imagens otimizadas
-.nojekyll             impede o Jekyll de processar a pasta assets
+index.html            página
+assets/css/style.css  estilos e tema
+assets/js/main.js     tema e repositórios do GitHub
+assets/img/           capturas dos sistemas
 ```
 
-A pasta `prints/` não é usada pela página — serve só de arquivo. Pode removê-la do
-repositório se quiser economizar espaço.
+## Contato
 
-## Detalhes de implementação
-
-- **Repositórios ao vivo.** A seção *Código aberto* lê a API pública do GitHub no
-  carregamento e ordena por estrelas, depois por ter descrição, depois por atualização.
-  Se a API falhar ou estourar o limite de requisições, uma lista de reserva no
-  `main.js` assume o lugar — a seção nunca aparece vazia. Para destacar outro
-  repositório, escreva uma descrição nele no GitHub: a página se atualiza sozinha.
-- **Tema.** Segue o sistema operacional por padrão e guarda a escolha manual no
-  `localStorage`. O tema é aplicado antes da primeira pintura, então não há piscada.
-- **Imagens.** As capturas foram convertidas para WebP a 1600px de largura
-  (1,7 MB → 202 kB) e carregam sob demanda.
-- **Acessibilidade.** Link para pular ao conteúdo, marcos semânticos, foco visível,
-  contraste conferido nos dois temas e `prefers-reduced-motion` respeitado.
-- **Sem dependências.** Nenhum pacote, nenhum CDN de JavaScript. A única requisição
-  externa é a dos tipos no Google Fonts.
+- GitHub: [Kazualkun](https://github.com/Kazualkun)
+- LinkedIn: [gustavo-kazuo-momma](https://www.linkedin.com/in/gustavo-kazuo-momma-6a1a93251)
+- E-mail: ikazualtwitch@gmail.com

@@ -102,13 +102,57 @@ const TRAJETORIA = [
 const METRICAS = [
   /* "valor" aceita texto simples ou { pt, en }, para separador de milhar. */
   { valor: { pt: '4.000+', en: '4,000+' }, rotulo: { pt: 'laudos assinados por mês', en: 'signed reports a month' } },
-  { valor: '50+',   rotulo: { pt: 'clínicas atendidas', en: 'clinics served' } },
   { valor: '5',     rotulo: { pt: 'sistemas em produção', en: 'systems in production' } },
   { fonte: 'repos', rotulo: { pt: 'repositórios públicos', en: 'public repositories' } }
 ];
 
 /* -----------------------------------------------------------
-   3. TEXTOS DA INTERFACE
+   3. O QUE OS SISTEMAS ENTREGAM
+   Um cartão por sistema que já tem número para mostrar.
+   ----------------------------------------------------------- */
+const IMPACTO = [
+  {
+    sistema: 'IMACARDIOS',
+    marca: 'imacardios',
+    numeros: [
+      { valor: { pt: '4.000+', en: '4,000+' }, rotulo: { pt: 'laudos por mês', en: 'reports a month' } },
+      { valor: '50+', rotulo: { pt: 'clínicas em todo o país', en: 'clinics across Brazil' } }
+    ],
+    nota: {
+      pt: 'Cada laudo sai com assinatura digital e um QR code que serve de comprovante.',
+      en: 'Every report carries a digital signature and a QR code that works as proof.'
+    }
+  },
+  {
+    sistema: 'Intranet HSF',
+    marca: 'hsf',
+    numeros: [
+      { valor: '5', rotulo: { pt: 'unidades do Grupo São Francisco', en: 'Grupo São Francisco units' } }
+    ],
+    nota: {
+      pt: 'Banco de documentos protegido pela LGPD, dashboards e linhas do tempo, no trabalho de todas as áreas e de todos os colaboradores.',
+      en: 'An LGPD-protected document library, dashboards and timelines, used across every department and by every member of staff.'
+    }
+  }
+];
+
+/* -----------------------------------------------------------
+   4. DESCRIÇÕES DOS REPOSITÓRIOS
+   Substituem o texto que vem do GitHub, quando houver.
+   ----------------------------------------------------------- */
+const NOTAS_REPO = {
+  'Blindagemjuridica': {
+    pt: 'Skill para o Claude que revisa um site em busca de risco jurídico, falha de LGPD e brecha de segurança.',
+    en: 'A Claude skill that reviews a website for legal risk, data-protection gaps and security holes.'
+  },
+  'AI-PC-optimizer': {
+    pt: 'Skill para o Claude que melhora o desempenho do Windows e organiza os arquivos da máquina.',
+    en: 'A Claude skill that tunes Windows performance and tidies up the files on the machine.'
+  }
+};
+
+/* -----------------------------------------------------------
+   5. TEXTOS DA INTERFACE
    O português já está escrito direto no index.html, então a
    página funciona sem JavaScript. Estas chaves são usadas para
    trocar de idioma nos dois sentidos.
@@ -120,6 +164,7 @@ const TEXTOS = {
     'nav.sistemas': 'Sistemas',
     'nav.stack': 'Stack',
     'nav.codigo': 'Código aberto',
+    'nav.impacto': 'Entregas',
     'nav.trajetoria': 'Trajetória',
     'nav.contato': 'Contato',
     'nav.abrir': 'Abrir menu',
@@ -213,12 +258,15 @@ const TEXTOS = {
     'desc.iaauto': 'Ferramentas próprias e modelos rodando na minha máquina.',
     'desc.eng': 'O que a entrega precisa cumprir antes de ir para produção.',
 
+    'imp.rotulo': 'O que eles entregam',
+    'imp.nota': 'Os números que esses sistemas movem todo mês.',
+
     'traj.rotulo': 'Trajetória',
     'traj.nota': 'Onde trabalhei e onde estudei, em ordem.',
     'traj.atual': 'atual',
 
     'cod.rotulo': 'Código aberto',
-    'cod.nota': 'Repositórios públicos, lidos direto do GitHub.',
+    'cod.nota': 'Repositórios públicos, lidos direto do GitHub. Dois deles são skills que escrevi para o Claude.',
     'cod.carregando': 'Carregando repositórios…',
     'cod.todos': 'Ver todos no GitHub',
     'cod.semdesc': 'Sem descrição no repositório.',
@@ -236,6 +284,7 @@ const TEXTOS = {
     'nav.sistemas': 'Systems',
     'nav.stack': 'Stack',
     'nav.codigo': 'Open source',
+    'nav.impacto': 'Delivery',
     'nav.trajetoria': 'Experience',
     'nav.contato': 'Contact',
     'nav.abrir': 'Open menu',
@@ -329,12 +378,15 @@ const TEXTOS = {
     'desc.iaauto': 'Tools of my own and models running on my own machine.',
     'desc.eng': 'What a delivery has to meet before it reaches production.',
 
+    'imp.rotulo': 'What they deliver',
+    'imp.nota': 'The numbers these systems move every month.',
+
     'traj.rotulo': 'Experience',
     'traj.nota': 'Where I have worked and studied, in order.',
     'traj.atual': 'current',
 
     'cod.rotulo': 'Open source',
-    'cod.nota': 'Public repositories, read straight from GitHub.',
+    'cod.nota': 'Public repositories, read straight from GitHub. Two of them are skills I wrote for Claude.',
     'cod.carregando': 'Loading repositories…',
     'cod.todos': 'See all on GitHub',
     'cod.semdesc': 'No description on the repository.',

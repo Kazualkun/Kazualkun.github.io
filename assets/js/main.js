@@ -77,6 +77,7 @@
     textoTema();
     rotuloMenu();
     montarTrajetoria();
+    montarEntregas();
     montarLeituras();
     montarRepos();
     /* Depois de trocar o texto, o título é redividido em palavras. */
@@ -191,6 +192,44 @@
       item.appendChild(corpo);
       caixaLinha.appendChild(item);
     });
+
+    /* Montadas agora, precisam entrar na fila do observador. */
+    if (typeof registrarEtapas === 'function') registrarEtapas();
+  }
+
+  /* ---------- O que eles entregam ---------- */
+  var caixaEntregas = document.getElementById('entregas');
+
+  function idioma(v) {
+    if (v && typeof v === 'object') return v[estado.lang] || v.pt || '';
+    return v || '';
+  }
+
+  function montarEntregas() {
+    if (!caixaEntregas || typeof IMPACTO === 'undefined') return;
+    caixaEntregas.innerHTML = '';
+
+    IMPACTO.forEach(function (item) {
+      var li = document.createElement('li');
+      li.className = 'entrega';
+      li.style.setProperty('--marca', 'var(--c-' + item.marca + ')');
+
+      li.appendChild(criar('p', 'entrega__sistema', item.sistema));
+
+      var nums = criar('div', 'entrega__numeros');
+      (item.numeros || []).forEach(function (n) {
+        var caixa = document.createElement('div');
+        caixa.appendChild(criar('p', 'entrega__valor', idioma(n.valor)));
+        caixa.appendChild(criar('p', 'entrega__rotulo', idioma(n.rotulo)));
+        nums.appendChild(caixa);
+      });
+      li.appendChild(nums);
+
+      var nota = idioma(item.nota);
+      if (nota) li.appendChild(criar('p', 'entrega__nota', nota));
+
+      caixaEntregas.appendChild(li);
+    });
   }
 
   /* ---------- Números ---------- */
@@ -259,8 +298,11 @@
       link.rel = 'noopener';
 
       link.appendChild(criar('span', 'repo__nome', repo.name));
+      var nota = (typeof NOTAS_REPO !== 'undefined' && NOTAS_REPO[repo.name])
+        ? (NOTAS_REPO[repo.name][estado.lang] || NOTAS_REPO[repo.name].pt)
+        : null;
       link.appendChild(criar('span', 'repo__sobre',
-        (repo.description && String(repo.description).trim()) || t('cod.semdesc')));
+        nota || (repo.description && String(repo.description).trim()) || t('cod.semdesc')));
 
       var meta = criar('span', 'repo__meta');
       if (repo.language) {
@@ -357,13 +399,35 @@
   }
   marcar('.bloco', 'bloco--visto');
   marcar('.registro', 'registro--visto');
-  if (caixaLinha) caixaLinha.dataset.entrada = 'linha--vista';
   if (caixaLeituras) caixaLeituras.dataset.entrada = 'leituras--vistas';
+
+  /* As etapas nascem depois, no montarTrajetoria, então entram na fila lá. */
+  var aoEntrar = null;
+
+  function registrarEtapas() {
+    document.querySelectorAll('.etapa').forEach(function (n) {
+      if (n.dataset.entrada) return;
+      n.dataset.entrada = 'etapa--vista';
+      if (aoEntrar) aoEntrar.observe(n);
+      else n.classList.add('etapa--vista');
+    });
+  }
 
   function revelar(alvo) {
     if (!alvo || !alvo.dataset.entrada) return;
     alvo.classList.add(alvo.dataset.entrada);
     if (alvo.dataset.entrada === 'leituras--vistas') contarNumeros();
+  }
+
+  function pendente(n) {
+    return n.dataset.entrada && !n.classList.contains(n.dataset.entrada);
+  }
+
+  /* Revela o que a pessoa já alcançou, sem estragar o que ainda está por vir. */
+  function varrerAlcancados() {
+    document.querySelectorAll('[data-entrada]').forEach(function (n) {
+      if (pendente(n) && n.getBoundingClientRect().top < window.innerHeight * 0.92) revelar(n);
+    });
   }
 
   function revelarTudo() {
@@ -374,6 +438,7 @@
     document.querySelectorAll('.leitura__valor[data-final]').forEach(function (n) {
       n.textContent = n.dataset.final;
     });
+    /* O avanço da linha não entra aqui: quem o mantém certo é a rolagem. */
   }
 
   /* O CSS só esconde depois que o mecanismo que revela está de pé.
@@ -385,7 +450,7 @@
   } else {
     raiz.classList.add('anim');
 
-    var aoEntrar = new IntersectionObserver(function (entradas, obs) {
+    aoEntrar = new IntersectionObserver(function (entradas, obs) {
       entradas.forEach(function (e) {
         if (!e.isIntersecting) return;
         revelar(e.target);
@@ -395,6 +460,28 @@
 
     document.querySelectorAll('[data-entrada]').forEach(function (n) { aoEntrar.observe(n); });
 
+    /* Um só tratador de rolagem: avança a linha do tempo e, de quebra,
+       serve de reserva caso o observador não tenha disparado para algo. */
+    var pedido = null;
+
+    function naRolagem() {
+      pedido = null;
+      if (caixaLinha) {
+        var r = caixaLinha.getBoundingClientRect();
+        var p = (window.innerHeight * 0.62 - r.top) / Math.max(1, r.height);
+        caixaLinha.style.setProperty('--avanco', Math.min(1, Math.max(0, p)).toFixed(4));
+      }
+      varrerAlcancados();
+    }
+
+    function pedirQuadro() {
+      if (pedido === null) pedido = requestAnimationFrame(naRolagem);
+    }
+
+    window.addEventListener('scroll', pedirQuadro, { passive: true });
+    window.addEventListener('resize', pedirQuadro);
+    naRolagem();
+
     /* Uma sequência só: título sobe, índice entra atrás. */
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
@@ -403,8 +490,9 @@
       });
     });
 
-    /* Rede de segurança: nada fica escondido por mais de dois segundos e meio. */
-    setTimeout(revelarTudo, 2500);
+    /* Rede de segurança: o que já está na tela aparece de qualquer jeito.
+       O que ainda está abaixo continua entrando conforme a rolagem. */
+    setTimeout(varrerAlcancados, 2000);
   }
 
   /* Os números sobem até o valor, preservando prefixo e sufixo do texto. */

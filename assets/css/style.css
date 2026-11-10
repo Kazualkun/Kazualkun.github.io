@@ -37,6 +37,11 @@
   --t-maior: clamp(1.7rem, 1.35rem + 1.6vw, 2.35rem);
   --t-mostra: clamp(2.5rem, 1.2rem + 5.2vw, 5rem);
 
+  /* Arredondamento */
+  --r-sm: 9px;
+  --r-md: 14px;
+  --r-lg: 20px;
+
   /* Ritmo */
   --gutter: clamp(1.25rem, 5vw, 2.75rem);
   --largura: 1200px;
@@ -147,6 +152,7 @@ a { color: inherit; text-decoration: none; }
   width: 1.85rem;
   height: 1.85rem;
   flex: none;
+  border-radius: var(--r-sm);
   border: 1px solid var(--tinta);
   color: var(--tinta);
   font-family: var(--mono);
@@ -172,7 +178,7 @@ a { color: inherit; text-decoration: none; }
 .controles { display: flex; align-items: center; gap: 0.5rem; flex: none; }
 
 /* Idioma: controle segmentado, os dois estados sempre visíveis. */
-.idioma { display: flex; border: 1px solid var(--linha); }
+.idioma { display: flex; border: 1px solid var(--linha); border-radius: var(--r-sm); overflow: hidden; }
 .idioma button {
   padding: 0.38rem 0.5rem;
   background: transparent;
@@ -196,6 +202,7 @@ a { color: inherit; text-decoration: none; }
   padding: 0;
   background: transparent;
   border: 1px solid var(--linha);
+  border-radius: var(--r-sm);
   color: var(--tinta);
   cursor: pointer;
 }
@@ -232,6 +239,7 @@ a { color: inherit; text-decoration: none; }
   padding: 0.4rem 0.7rem;
   background: transparent;
   border: 1px solid var(--linha);
+  border-radius: var(--r-sm);
   color: var(--tinta-2);
   font: inherit;
   font-size: var(--t-micro);
@@ -328,6 +336,7 @@ a { color: inherit; text-decoration: none; }
   display: inline-block;
   padding: 0.7rem 1.3rem;
   border: 1px solid var(--linha);
+  border-radius: var(--r-md);
   color: var(--tinta);
   font-size: var(--t-min);
   font-weight: 500;
@@ -412,10 +421,12 @@ a { color: inherit; text-decoration: none; }
   max-width: 64rem;
   background: var(--linha-fina);
   border: 1px solid var(--linha-fina);
+  border-radius: var(--r-md);
+  overflow: hidden;
 }
 .leituras[hidden] { display: none; }
 
-.leitura { padding: 1rem 1.15rem; background: var(--papel); }
+.leitura { padding: 1.05rem 1.2rem; background: var(--papel); }
 .leitura__valor {
   font-family: var(--mono);
   font-size: 1.5rem;
@@ -426,6 +437,73 @@ a { color: inherit; text-decoration: none; }
 }
 .leitura__rotulo { margin-top: 0.3rem; font-size: var(--t-micro); color: var(--tinta-3); }
 
+
+/* ---------- O que eles entregam ---------- */
+.entregas { display: grid; gap: 1rem; }
+
+@media (min-width: 50rem) {
+  .entregas { grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr)); }
+}
+
+.entrega {
+  display: grid;
+  align-content: start;
+  gap: 1.5rem;
+  padding: 1.75rem;
+  background: var(--superficie);
+  border: 1px solid var(--linha-fina);
+  border-radius: var(--r-lg);
+  transition: border-color .3s, box-shadow .3s, transform .3s cubic-bezier(.3,.7,.3,1);
+}
+
+@media (hover: hover) {
+  .entrega:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--marca) 45%, var(--linha));
+    box-shadow: 0 1px 2px rgb(var(--sombra) / .05), 0 18px 36px -16px rgb(var(--sombra) / .26);
+  }
+}
+
+.entrega__sistema {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: var(--t-min);
+  font-weight: 600;
+  color: var(--marca);
+  letter-spacing: -0.01em;
+}
+.entrega__sistema::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  background: var(--marca);
+  flex: none;
+}
+
+.entrega__numeros { display: grid; gap: 1.1rem; }
+
+.entrega__valor {
+  font-size: clamp(2rem, 1.4rem + 2.2vw, 3rem);
+  font-weight: 700;
+  font-variation-settings: "wdth" 106;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--tinta);
+}
+
+.entrega__rotulo { margin-top: 0.4rem; font-size: var(--t-min); color: var(--tinta-2); }
+
+.entrega__nota {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--linha-fina);
+  font-size: var(--t-min);
+  color: var(--tinta-2);
+  line-height: 1.55;
+  max-width: 44ch;
+}
 
 /* ---------- Linha do tempo ----------
    É mesmo uma sequência, então o marcador e a linha informam
@@ -443,8 +521,10 @@ a { color: inherit; text-decoration: none; }
   transform-origin: 50% 0;
   transition: transform .9s cubic-bezier(.3,.7,.3,1);
 }
-.anim .linha::before { transform: scaleY(0); }
-.anim .linha--vista::before { transform: scaleY(1); }
+.anim .linha::before {
+  transform: scaleY(var(--avanco, 0));
+  transition: none;                      /* o avanço vem da rolagem */
+}
 
 /* A trajetória é montada por JavaScript: sem ele, não mostra seção vazia. */
 html:not(.js) #trajetoria { display: none; }
@@ -455,6 +535,13 @@ html:not(.js) #trajetoria { display: none; }
   gap: 0.2rem 2rem;
   padding: 0 0 2.25rem 1.6rem;
 }
+
+.anim .etapa { opacity: 0; translate: 0 14px; }
+.anim .etapa--vista {
+  opacity: 1;
+  translate: 0 0;
+  transition: opacity .55s ease, translate .55s cubic-bezier(.3,.7,.3,1);
+}
 .etapa:last-child { padding-bottom: 0; }
 
 /* Marcador quadrado: cheio para trabalho, vazado para formação. */
@@ -463,8 +550,9 @@ html:not(.js) #trajetoria { display: none; }
   position: absolute;
   left: -4px;
   top: 0.5rem;
-  width: 9px;
-  height: 9px;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
   background: var(--papel);
   border: 1.5px solid var(--tinta-3);
 }
@@ -485,6 +573,7 @@ html:not(.js) #trajetoria { display: none; }
 .etapa__agora {
   padding: 0.1rem 0.45rem;
   border: 1px solid var(--linha);
+  border-radius: 99px;
   font-size: var(--t-micro);
   color: var(--tinta-2);
   background: var(--superficie);
@@ -663,6 +752,7 @@ html:not(.js) #trajetoria { display: none; }
 .etiquetas li {
   padding: 0.28rem 0.65rem;
   border: 1px solid var(--linha);
+  border-radius: 99px;
   font-size: var(--t-micro);
   color: var(--tinta-2);
   background: color-mix(in srgb, var(--superficie) 70%, transparent);
@@ -674,7 +764,7 @@ html:not(.js) #trajetoria { display: none; }
 .janela {
   margin: 0;
   border: 1px solid var(--linha);
-  border-radius: 10px;
+  border-radius: var(--r-lg);
   overflow: hidden;
   background: var(--superficie);
   box-shadow: 0 1px 2px rgb(var(--sombra) / .07), 0 16px 38px -16px rgb(var(--sombra) / .26);
@@ -697,14 +787,42 @@ html:not(.js) #trajetoria { display: none; }
 }
 
 /* ---------- Stack ----------
-   Cada categoria diz para que serve, não só o que é. */
-.stack { display: grid; gap: 1px; background: var(--linha-fina); border-block: 1px solid var(--linha-fina); }
+   Cada categoria é um cartão que diz para que serve, não só o que é. */
+.stack { display: grid; gap: 0.75rem; }
 
 .stack__grupo {
+  position: relative;
   display: grid;
   gap: 0.6rem 2.5rem;
-  padding: 1.6rem 0;
-  background: var(--papel-rec);
+  padding: 1.5rem 1.6rem;
+  background: var(--superficie);
+  border: 1px solid var(--linha-fina);
+  border-radius: var(--r-md);
+  transition: border-color .28s, box-shadow .28s, transform .28s cubic-bezier(.3,.7,.3,1);
+}
+
+/* Fio de tinta que cresce na lateral quando o ponteiro passa. */
+.stack__grupo::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 50%;
+  translate: 0 -50%;
+  width: 3px;
+  height: 0;
+  border-radius: 3px;
+  background: var(--tinta);
+  transition: height .32s cubic-bezier(.3,.7,.3,1);
+}
+
+@media (hover: hover) {
+  .stack__grupo:hover {
+    transform: translateY(-2px);
+    border-color: var(--linha);
+    box-shadow: 0 1px 2px rgb(var(--sombra) / .05), 0 12px 28px -14px rgb(var(--sombra) / .22);
+  }
+  .stack__grupo:hover::before { height: 46%; }
+  .stack__grupo:hover .stack__nome { color: var(--tinta); }
 }
 
 .stack__nome {
@@ -729,6 +847,7 @@ html:not(.js) #trajetoria { display: none; }
   padding: 0.3rem 0.7rem;
   background: var(--superficie);
   border: 1px solid var(--linha-fina);
+  border-radius: 99px;
   font-size: var(--t-micro);
   color: var(--tinta-2);
 }
@@ -743,6 +862,8 @@ html:not(.js) #trajetoria { display: none; }
   gap: 1px;
   background: var(--linha-fina);
   border: 1px solid var(--linha-fina);
+  border-radius: var(--r-md);
+  overflow: hidden;
   margin-bottom: 1.75rem;
 }
 

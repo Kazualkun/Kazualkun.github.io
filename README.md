@@ -5,26 +5,25 @@ etapa de build. Publica direto no GitHub Pages.
 
 ## Publicar no GitHub Pages
 
-1. Crie um repositório chamado `Kazualkun.github.io` (o nome precisa ser exatamente esse
-   para a página ficar na raiz do domínio).
-2. Envie os arquivos:
+```bash
+git init
+git add .
+git commit -m "Portfólio"
+git branch -M main
+git remote add origin https://github.com/Kazualkun/Kazualkun.github.io.git
+git push -u origin main
+```
 
-   ```bash
-   git init
-   git add .
-   git commit -m "Portfólio"
-   git branch -M main
-   git remote add origin https://github.com/Kazualkun/Kazualkun.github.io.git
-   git push -u origin main
-   ```
+Depois abra **Settings → Pages** no repositório e aponte *Source* para a branch `main`,
+pasta `/ (root)`. Em um ou dois minutos a página responde em `https://kazualkun.github.io`.
 
-3. No repositório, abra **Settings → Pages** e aponte *Source* para a branch `main`,
-   pasta `/ (root)`.
-4. Em um ou dois minutos a página responde em `https://kazualkun.github.io`.
+Para atualizar a página depois de qualquer mudança:
 
-Se preferir um repositório com outro nome (por exemplo `portfolio`), o endereço vira
-`https://kazualkun.github.io/portfolio/`. Nesse caso nada muda no código: todos os
-caminhos já são relativos.
+```bash
+git add .
+git commit -m "Descrição da mudança"
+git push
+```
 
 ## Rodar localmente
 
@@ -35,14 +34,14 @@ python -m http.server 8000
 Depois abra `http://localhost:8000`. Abrir o `index.html` direto pelo sistema de arquivos
 também funciona, mas a busca de repositórios no GitHub só responde servida por HTTP.
 
-## O que você precisa trocar antes de publicar
+## Único ajuste opcional depois de publicar
 
-| Onde | O quê |
-| --- | --- |
-| `index.html` — abertura e rodapé | Endereço do seu LinkedIn (está como `linkedin.com/in/gustavo-momma`) |
-| `index.html` — rodapé | E-mail de contato (está como `contato@exemplo.com`) |
-| `assets/img/` | Captura do Imacardios, se quiser trocar a placa por uma imagem real |
-| `index.html` — `og:image` | Depois de publicar, troque por uma URL absoluta se quiser pré-visualização no WhatsApp e no LinkedIn |
+A tag `og:image` no `index.html` usa caminho relativo. WhatsApp e LinkedIn só mostram a
+pré-visualização com URL absoluta, então, depois do primeiro deploy, troque para:
+
+```html
+<meta property="og:image" content="https://kazualkun.github.io/assets/img/og.png">
+```
 
 ## Estrutura
 

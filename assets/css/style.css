@@ -17,9 +17,9 @@
   --foco:       #0B52C9;
   --sombra:     18 27 42;
 
-  /* Cores das marcas reais */
-  --c-imacardios: #C0263C;
-  --c-torii:      #B93F26;
+  /* Cores das marcas reais, escurecidas o mínimo para passar em contraste AA. */
+  --c-imacardios: #215ADC;
+  --c-torii:      #B03A20;
   --c-wardpoint:  #5B48D8;
   --c-hsf:        #14715A;
 
@@ -53,7 +53,7 @@
   --foco:       #74ACFF;
   --sombra:     0 0 0;
 
-  --c-imacardios: #FF7183;
+  --c-imacardios: #8FB4FF;
   --c-torii:      #F0815F;
   --c-wardpoint:  #9C8CFF;
   --c-hsf:        #3FBF97;
@@ -452,24 +452,6 @@ a { color: inherit; text-decoration: none; }
 }
 /* Sem recorte: cada captura aparece inteira, como o sistema é de verdade. */
 .janela img { width: 100%; height: auto; }
-
-/* Placa tipográfica para o sistema sem captura. */
-.placa {
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: 1.25rem;
-  aspect-ratio: 1.95 / 1;
-  padding: 2rem;
-  border: 1px solid color-mix(in srgb, var(--marca) 28%, var(--linha));
-  border-radius: 10px;
-  background:
-    radial-gradient(80% 120% at 50% 0%, color-mix(in srgb, var(--marca) 11%, transparent), transparent 70%),
-    var(--superficie);
-  color: var(--marca);
-}
-.placa__traco { width: min(100%, 20rem); height: auto; opacity: .9; }
-.placa__dominio { font-family: var(--mono); font-size: var(--t-min); }
 
 /* ---------- Stack ---------- */
 .stack { border-top: 1px solid var(--linha); }
